@@ -102,6 +102,21 @@ header {
 }
 
 /* ── Back / Admin link in header ────────────────────────────────────────────── */
+.admin-header-btn {
+  color: var(--gold-light);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid rgba(201,168,76,0.5);
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: rgba(201,168,76,0.12);
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+.admin-header-btn:hover { background: rgba(201,168,76,0.28); }
+
 .back-btn {
   color: var(--gold-light);
   text-decoration: none;
