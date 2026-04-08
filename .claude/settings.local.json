@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py:*)",
+      "Bash(curl -s http://localhost:3000/api/entries)",
+      "Bash(curl -s http://localhost:3000/api/leaderboard)",
+      "Bash(node -e ':*)",
+      "Bash(curl -s http://localhost:3000/api/scores)",
+      "Bash(curl -s \"https://www.masters.com/en_US/scores/feeds/2026/scores.json\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(pkill -f \"node server.js\")",
+      "Bash(netstat -ano)",
+      "Bash(xargs taskkill:*)",
+      "Bash(Get-Process -Name \"node\")",
+      "Bash(Stop-Process -Force)",
+      "Bash(PORT=3001 node server.js)",
+      "Bash(curl -s http://localhost:3001/api/scores)"
+    ]
+  }
+}

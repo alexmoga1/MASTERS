@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 Masters Pool</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-flag">⛳</div>
+      <div class="header-text">
+        <h1>2026 Masters Pool</h1>
+        <p class="header-sub">Augusta National Golf Club</p>
+      </div>
+      <div class="header-status">
+        <div class="live-dot" id="liveDot"></div>
+        <span id="lastUpdated">Loading…</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Prize Pool Banner -->
+    <section class="prize-banner" id="prizeBanner">
+      <div class="prize-item" id="prize1st"></div>
+      <div class="prize-divider"></div>
+      <div class="prize-item" id="prize2nd"></div>
+      <div class="prize-divider"></div>
+      <div class="prize-item" id="prize3rd"></div>
+      <div class="prize-divider"></div>
+      <div class="prize-item pool-total" id="prizePool"></div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section class="lb-section">
+      <div class="lb-header-row">
+        <h2>Leaderboard</h2>
+        <button class="refresh-btn" id="refreshBtn" onclick="refreshNow()">↻ Refresh</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="lb-table" id="lbTable">
+          <thead>
+            <tr>
+              <th class="col-pos">POS</th>
+              <th class="col-name">PLAYER</th>
+              <th class="col-round">R1</th>
+              <th class="col-round">R2</th>
+              <th class="col-round">R3</th>
+              <th class="col-round">R4</th>
+              <th class="col-total">TOTAL</th>
+              <th class="col-expand"></th>
+            </tr>
+          </thead>
+          <tbody id="lbBody">
+            <tr>
+              <td colspan="8" class="loading-cell">
+                <div class="spinner"></div>
+                Fetching live scores…
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Refresh countdown -->
+    <div class="refresh-bar">
+      <span id="countdown"></span>
+    </div>
+  </main>
+
+  <footer>
+    <span>$<span id="buyIn">7</span> buy-in · Venmo <strong>@Jack-Raber</strong></span>
+    <span class="footer-divider">·</span>
+    <a href="/admin.html" class="admin-link">Admin</a>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

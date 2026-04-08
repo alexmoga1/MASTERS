@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — 2026 Masters Pool</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="admin-page">
+
+  <!-- Password Gate -->
+  <div id="authGate" class="auth-gate">
+    <div class="auth-card">
+      <div class="auth-flag">⛳</div>
+      <h2>Admin Access</h2>
+      <p>2026 Masters Pool</p>
+      <input
+        type="password"
+        id="passwordInput"
+        placeholder="Enter admin password"
+        onkeydown="if(event.key==='Enter') login()"
+      />
+      <button onclick="login()">Login</button>
+      <p class="auth-err" id="authErr"></p>
+    </div>
+  </div>
+
+  <!-- Admin Panel (hidden until logged in) -->
+  <div id="adminPanel" style="display:none">
+    <header>
+      <div class="header-inner">
+        <div class="header-flag">⛳</div>
+        <div class="header-text">
+          <h1>Admin Panel</h1>
+          <p class="header-sub">2026 Masters Pool</p>
+        </div>
+        <a href="/" class="back-btn">← Leaderboard</a>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- Participants list -->
+      <section class="admin-section">
+        <div class="section-header">
+          <h2>Participants</h2>
+          <button class="btn-primary" onclick="showAddForm()">+ Add Participant</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="lb-table" id="participantTable">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>TIER 1</th>
+                <th>TIER 2</th>
+                <th>TIER 3</th>
+                <th>TIER 4</th>
+                <th>TIER 5</th>
+                <th>PAID</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="participantBody">
+              <tr><td colspan="8" class="loading-cell">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Add / Edit Participant Form -->
+      <section class="admin-section" id="entryFormSection" style="display:none">
+        <h2 id="formTitle">Add Participant</h2>
+        <form id="entryForm" onsubmit="submitEntry(event)">
+          <input type="hidden" id="editId" value="" />
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Name *</label>
+              <input type="text" id="fName" placeholder="e.g. Jane D" required />
+            </div>
+
+            <div class="form-group">
+              <label>Tier 1 Pick *</label>
+              <select id="fTier1" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 2 Pick *</label>
+              <select id="fTier2" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 3 Pick *</label>
+              <select id="fTier3" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 4 Pick *</label>
+              <select id="fTier4" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 5 Pick (optional)</label>
+              <div class="tier5-group">
+                <select id="fTier5Select">
+                  <option value="">Select or type below…</option>
+                </select>
+                <input type="text" id="fTier5Custom" placeholder="Or enter custom golfer name" />
+              </div>
+            </div>
+
+            <div class="form-group form-group-check">
+              <label>
+                <input type="checkbox" id="fPaid" />
+                Paid ($<span id="buyInLabel">7</span>)
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="submitBtn">Add Participant</button>
+            <button type="button" class="btn-secondary" onclick="hideForm()">Cancel</button>
+          </div>
+          <p class="form-err" id="formErr"></p>
+        </form>
+      </section>
+
+      <!-- Settings -->
+      <section class="admin-section">
+        <h2>Settings</h2>
+        <form onsubmit="saveSettings(event)" class="form-grid">
+          <div class="form-group">
+            <label>Buy-In Amount ($)</label>
+            <input type="number" id="sBuyIn" min="1" step="1" />
+          </div>
+          <div class="form-group">
+            <label>Missed-Cut Penalty — Round 3 (auto if blank)</label>
+            <input type="number" id="sPenalty3" step="0.1" placeholder="e.g. +6" />
+          </div>
+          <div class="form-group">
+            <label>Missed-Cut Penalty — Round 4 (auto if blank)</label>
+            <input type="number" id="sPenalty4" step="0.1" placeholder="e.g. +7" />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Settings</button>
+          </div>
+          <p class="form-err" id="settingsErr"></p>
+          <p class="form-ok" id="settingsOk"></p>
+        </form>
+      </section>
+
+      <!-- Score cache refresh -->
+      <section class="admin-section">
+        <h2>Live Scores</h2>
+        <p>Cache refreshes automatically every 60 seconds. Force a refresh below.</p>
+        <button class="btn-secondary" onclick="forceRefresh()">↻ Force Refresh Now</button>
+        <p id="refreshMsg" class="form-ok"></p>
+      </section>
+
+    </main>
+
+    <footer>
+      <a href="/" class="admin-link">← Back to Leaderboard</a>
+    </footer>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
