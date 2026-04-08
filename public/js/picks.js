@@ -4,6 +4,9 @@ let accessCode = '';
 let tiers = null;
 let buyInAmount = 7;
 
+// April 9, 2026 8:00am ET = 12:00pm UTC
+const SUBMISSION_DEADLINE = new Date('2026-04-09T12:00:00Z');
+
 // ── Access code gate ──────────────────────────────────────────────────────────
 
 function unlock() {
@@ -25,7 +28,7 @@ function unlock() {
     document.getElementById('picksPanel').style.display = 'block';
     document.getElementById('buyIn').textContent = buyInAmount;
 
-    if (lbData.settings?.locked) {
+    if (lbData.settings?.locked || Date.now() >= SUBMISSION_DEADLINE) {
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('lockedMsg').style.display = 'block';
     } else {

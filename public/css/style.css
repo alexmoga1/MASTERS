@@ -199,6 +199,43 @@ main {
   background: rgba(255,255,255,0.15);
 }
 
+/* ── Submit Picks CTA ───────────────────────────────────────────────────────── */
+.picks-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--green-dark);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--white);
+}
+
+.picks-cta strong { font-size: 0.95rem; }
+
+.picks-cta-sub {
+  display: block;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.65);
+  margin-top: 2px;
+}
+
+.picks-cta-btn {
+  background: var(--gold-light);
+  color: var(--green-dark);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.picks-cta-btn:hover { background: var(--gold); }
+
 /* ── Section ────────────────────────────────────────────────────────────────── */
 .lb-section, .admin-section {
   background: var(--white);

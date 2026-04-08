@@ -7,6 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'masters2026';
 const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'masters123';
+// April 9, 2026 8:00am ET = 12:00pm UTC
+const SUBMISSION_DEADLINE = new Date('2026-04-09T12:00:00Z');
 
 // Cache live scores for 60 seconds
 let scoreCache = { data: null, timestamp: 0 };
@@ -469,7 +471,7 @@ app.post('/api/submit', (req, res) => {
 
   const data = loadData();
 
-  if (data.settings.locked) {
+  if (data.settings.locked || Date.now() >= SUBMISSION_DEADLINE) {
     return res.status(403).json({ error: 'Submissions are closed. The tournament has started.' });
   }
 

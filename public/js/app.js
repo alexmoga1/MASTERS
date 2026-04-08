@@ -88,10 +88,7 @@ function renderLeaderboard(data) {
       <td class="col-pos">
         <span class="pos-badge ${posClass(p.position)}">${posDisplay}</span>
       </td>
-      <td class="col-name">
-        ${p.name}
-        ${p.paid ? '<span class="paid-badge">PAID</span>' : ''}
-      </td>
+      <td class="col-name">${p.name}</td>
       <td class="col-round ${scoreClass(p.roundScores[0])}">${fmt(p.roundScores[0])}</td>
       <td class="col-round ${scoreClass(p.roundScores[1])}">${fmt(p.roundScores[1])}</td>
       <td class="col-round ${scoreClass(p.roundScores[2])}">${fmt(p.roundScores[2])}</td>
@@ -241,6 +238,13 @@ function refreshNow() {
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+
+// Hide submit CTA after deadline
+const SUBMISSION_DEADLINE = new Date('2026-04-09T12:00:00Z');
+if (Date.now() >= SUBMISSION_DEADLINE) {
+  const cta = document.getElementById('picksCta');
+  if (cta) cta.style.display = 'none';
+}
 
 load();
 startCountdown();
