@@ -656,47 +656,62 @@ footer {
 .instr-step strong { display: block; font-size: 0.92rem; margin-bottom: 2px; }
 .instr-step p { font-size: 0.82rem; color: var(--gray-600); margin: 0; }
 
-/* ── Hype modal ──────────────────────────────────────────────────────────────── */
-.hype-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  padding: 20px;
+/* ── Tier tag labels ─────────────────────────────────────────────────────────── */
+.tier-tag {
+  font-size: 0.68rem;
+  background: var(--green);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 1px 7px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.tier-tag-opt {
+  background: var(--gray-400);
 }
 
-.hype-card {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 36px 28px;
-  max-width: 380px;
-  width: 100%;
-  text-align: center;
-  box-shadow: var(--shadow-lg);
-  animation: hype-pop 0.25s ease-out;
+/* ── Hype card (inline, no dismiss needed) ───────────────────────────────────── */
+.hype-card-inline {
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  padding: 18px 20px;
+  animation: hype-pop 0.3s ease-out;
 }
 
 @keyframes hype-pop {
-  from { transform: scale(0.88); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
+  from { transform: translateY(-6px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
-.hype-icon { font-size: 3rem; margin-bottom: 12px; }
+.hype-card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
 
-.hype-card h2 {
+.hype-icon-inline {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.hype-title-inline {
   font-family: var(--font);
-  color: var(--green-dark);
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 4px;
 }
 
-.hype-card p {
-  color: var(--gray-600);
-  font-size: 0.9rem;
-  line-height: 1.55;
+.hype-msg-inline {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.5;
 }
 
 .btn-primary {

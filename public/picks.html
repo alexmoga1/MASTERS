@@ -41,51 +41,73 @@
 
     <main>
 
-      <!-- Locked message (shown if submissions closed) -->
+      <!-- Locked message -->
       <div id="lockedMsg" class="admin-section" style="display:none">
         <h2>Submissions Closed</h2>
         <p style="padding:16px 20px">The Masters has started — picks are locked. Contact the admin if you have questions.</p>
       </div>
 
-      <!-- How it works -->
+      <!-- What is this? -->
       <section class="admin-section" id="howItWorks">
-        <h2>How It Works</h2>
+        <h2>What Is This?</h2>
         <div class="instructions-grid">
+
+          <div class="instr-step">
+            <div class="instr-num">🏆</div>
+            <div>
+              <strong>The Goal</strong>
+              <p>The Masters is a 4-round golf tournament at Augusta National. Your job is to build the best team of golfers possible. At the end of 4 rounds, whoever has the lowest combined team score wins the pool — and the prize money.</p>
+            </div>
+          </div>
+
           <div class="instr-step">
             <div class="instr-num">1</div>
             <div>
               <strong>Pick one golfer from each tier</strong>
-              <p>Tiers 1–4 are required. Tier 5 is optional but can only help you.</p>
+              <p>Tiers 1–4 are required. Tier 5 is optional but free upside — always pick one. Tier 1 = heavy favorites. Tier 5 = longshots with big potential.</p>
             </div>
           </div>
+
           <div class="instr-step">
             <div class="instr-num">2</div>
             <div>
-              <strong>Tiers are based on odds</strong>
-              <p>Tier 1 = favorites, Tier 5 = longshots. Every team gets one elite pick and some underdogs.</p>
+              <strong>How your team score is calculated</strong>
+              <p>Each round, your team score = the sum of all your golfers' scores, <em>minus the single worst score</em>. So every round your worst golfer gets dropped — a safety net built in.</p>
             </div>
           </div>
+
           <div class="instr-step">
             <div class="instr-num">3</div>
             <div>
-              <strong>Team score = sum of your golfers, minus the worst each round</strong>
-              <p>Each round, the highest (worst) score among your golfers is dropped. Lower total wins.</p>
+              <strong>Golf scoring: lower is better</strong>
+              <p>Scores are shown relative to par (e.g. -5 means 5 under par). The golfer who plays the fewest strokes wins. You want your team's total to be as far below par as possible.</p>
             </div>
           </div>
+
           <div class="instr-step">
             <div class="instr-num">4</div>
             <div>
-              <strong>Missed cuts get a penalty</strong>
-              <p>If your golfer misses the cut, they receive the average of the 10 worst scores for rounds 3 &amp; 4.</p>
+              <strong>Missed cuts get penalized</strong>
+              <p>If your golfer misses the cut (eliminated after round 2), they receive a penalty score for rounds 3 &amp; 4 — the average of the 10 worst active players that round. Pick wisely.</p>
             </div>
           </div>
+
           <div class="instr-step">
             <div class="instr-num">5</div>
+            <div>
+              <strong>Strategy tip</strong>
+              <p>Don't just pick the favorites. A Tier 1 lock is smart, but your Tier 4 &amp; 5 picks are where you can separate yourself. A hot week from a longshot beats a boring safe pick every time.</p>
+            </div>
+          </div>
+
+          <div class="instr-step">
+            <div class="instr-num">💸</div>
             <div>
               <strong>Pay your $<span id="buyInInstr">7</span> buy-in</strong>
               <p>Venmo <strong>@Jack-Raber</strong> after submitting. You're not officially in until you've paid.</p>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -103,35 +125,35 @@
             </div>
 
             <div class="form-group">
-              <label>Tier 1 Pick *</label>
+              <label>Tier 1 Pick * <span class="tier-tag">Favorites</span></label>
               <select id="pTier1" required>
                 <option value="">Select golfer…</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label>Tier 2 Pick *</label>
+              <label>Tier 2 Pick * <span class="tier-tag">Contenders</span></label>
               <select id="pTier2" required>
                 <option value="">Select golfer…</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label>Tier 3 Pick *</label>
+              <label>Tier 3 Pick * <span class="tier-tag">Value</span></label>
               <select id="pTier3" required>
                 <option value="">Select golfer…</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label>Tier 4 Pick *</label>
+              <label>Tier 4 Pick * <span class="tier-tag">Sleepers</span></label>
               <select id="pTier4" required>
                 <option value="">Select golfer…</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label>Tier 5 Pick <span style="font-weight:400;text-transform:none">(optional)</span></label>
+              <label>Tier 5 Pick <span class="tier-tag tier-tag-opt">Longshots — optional</span></label>
               <select id="pTier5">
                 <option value="">No Tier 5 pick</option>
               </select>
@@ -171,6 +193,18 @@
       </div>
     </header>
     <main>
+
+      <!-- Hype card — shown inline 1-in-3 chance, no dismiss needed -->
+      <div id="hypeCard" class="hype-card-inline" style="display:none">
+        <div class="hype-card-inner">
+          <span id="hypeIcon" class="hype-icon-inline"></span>
+          <div>
+            <div id="hypeTitle" class="hype-title-inline"></div>
+            <div id="hypeMsg" class="hype-msg-inline"></div>
+          </div>
+        </div>
+      </div>
+
       <section class="admin-section">
         <h2>Picks Confirmed</h2>
         <div style="padding:24px 20px">
@@ -185,16 +219,6 @@
         </div>
       </section>
     </main>
-  </div>
-
-  <!-- Hype modal (1-in-3 chance after submission) -->
-  <div id="hypeOverlay" class="hype-overlay" style="display:none" onclick="closeHype()">
-    <div class="hype-card" onclick="event.stopPropagation()">
-      <div class="hype-icon" id="hypeIcon">🔥</div>
-      <h2 id="hypeTitle"></h2>
-      <p id="hypeMsg"></p>
-      <button class="btn-primary" onclick="closeHype()" style="margin-top:16px;width:100%">Let's Go!</button>
-    </div>
   </div>
 
   <script src="/js/picks.js"></script>
