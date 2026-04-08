@@ -313,7 +313,6 @@ let hypeTimer = null;
 
 function maybeShowHype(golferName) {
   if (!golferName) return;
-  if (Math.random() > 1 / 3) return;
 
   const bank = GOLFER_HYPE[golferName] || FALLBACK_HYPE;
   const hype = bank[Math.floor(Math.random() * bank.length)];
@@ -335,12 +334,12 @@ function maybeShowHype(golferName) {
   // Animate the progress bar draining over 4s
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      bar.style.transition = 'width 4s linear';
+      bar.style.transition = 'width 8s linear';
       bar.style.width = '0%';
     });
   });
 
-  hypeTimer = setTimeout(dismissHype, 4000);
+  hypeTimer = setTimeout(dismissHype, 8000);
 }
 
 function dismissHype() {
