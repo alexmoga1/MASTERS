@@ -226,6 +226,7 @@ function populateTiers() {
       opt.textContent = `${g.name} (+${g.odds})`;
       sel.appendChild(opt);
     });
+    sel.addEventListener('change', () => maybeShowHype(sel.value));
   }
 
   const sel5 = document.getElementById('pTier5');
@@ -236,6 +237,7 @@ function populateTiers() {
     opt.textContent = `${g.name} (+${g.odds})`;
     sel5.appendChild(opt);
   });
+  sel5.addEventListener('change', () => maybeShowHype(sel5.value));
 }
 
 // ── Submit ────────────────────────────────────────────────────────────────────
@@ -303,16 +305,50 @@ function showConfirmation(name, picks) {
       <div class="golfer-name">${pick}</div>
     </div>
   `).join('');
+}
 
-  // 1-in-3 chance to show hype card
-  if (Math.random() <= 1 / 3) {
-    const candidate = picks[Math.floor(Math.random() * picks.length)];
-    const bank = GOLFER_HYPE[candidate] || FALLBACK_HYPE;
-    const hype = bank[Math.floor(Math.random() * bank.length)];
+// ── Hype toast ────────────────────────────────────────────────────────────────
 
-    document.getElementById('hypeIcon').textContent = hype.icon;
-    document.getElementById('hypeTitle').textContent = hype.title;
-    document.getElementById('hypeMsg').textContent = hype.msg;
-    document.getElementById('hypeCard').style.display = 'block';
-  }
+let hypeTimer = null;
+
+function maybeShowHype(golferName) {
+  if (!golferName) return;
+  if (Math.random() > 1 / 3) return;
+
+  const bank = GOLFER_HYPE[golferName] || FALLBACK_HYPE;
+  const hype = bank[Math.floor(Math.random() * bank.length)];
+
+  document.getElementById('hypeIcon').textContent = hype.icon;
+  document.getElementById('hypeTitle').textContent = hype.title;
+  document.getElementById('hypeMsg').textContent = hype.msg;
+
+  const toast = document.getElementById('hypeToast');
+  const bar = document.getElementById('hypeBar');
+
+  // Reset and show
+  clearTimeout(hypeTimer);
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  toast.classList.remove('hype-toast-out');
+  toast.style.display = 'block';
+
+  // Animate the progress bar draining over 4s
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      bar.style.transition = 'width 4s linear';
+      bar.style.width = '0%';
+    });
+  });
+
+  hypeTimer = setTimeout(dismissHype, 4000);
+}
+
+function dismissHype() {
+  clearTimeout(hypeTimer);
+  const toast = document.getElementById('hypeToast');
+  toast.classList.add('hype-toast-out');
+  setTimeout(() => {
+    toast.style.display = 'none';
+    toast.classList.remove('hype-toast-out');
+  }, 300);
 }

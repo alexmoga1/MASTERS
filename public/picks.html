@@ -194,17 +194,6 @@
     </header>
     <main>
 
-      <!-- Hype card — shown inline 1-in-3 chance, no dismiss needed -->
-      <div id="hypeCard" class="hype-card-inline" style="display:none">
-        <div class="hype-card-inner">
-          <span id="hypeIcon" class="hype-icon-inline"></span>
-          <div>
-            <div id="hypeTitle" class="hype-title-inline"></div>
-            <div id="hypeMsg" class="hype-msg-inline"></div>
-          </div>
-        </div>
-      </div>
-
       <section class="admin-section">
         <h2>Picks Confirmed</h2>
         <div style="padding:24px 20px">
@@ -219,6 +208,18 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Hype toast (auto-dismisses, triggered on dropdown change) -->
+  <div id="hypeToast" class="hype-toast" style="display:none" onclick="dismissHype()">
+    <div class="hype-toast-inner">
+      <span id="hypeIcon" class="hype-toast-icon"></span>
+      <div>
+        <div id="hypeTitle" class="hype-toast-title"></div>
+        <div id="hypeMsg" class="hype-toast-msg"></div>
+      </div>
+    </div>
+    <div class="hype-toast-bar" id="hypeBar"></div>
   </div>
 
   <script src="/js/picks.js"></script>

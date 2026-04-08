@@ -673,45 +673,69 @@ footer {
   background: var(--gray-400);
 }
 
-/* ── Hype card (inline, no dismiss needed) ───────────────────────────────────── */
-.hype-card-inline {
+/* ── Hype toast ──────────────────────────────────────────────────────────────── */
+.hype-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 480px;
   background: linear-gradient(135deg, var(--green-dark), var(--green));
-  border-radius: var(--radius);
-  margin-bottom: 16px;
-  padding: 18px 20px;
-  animation: hype-pop 0.3s ease-out;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  z-index: 999;
+  cursor: pointer;
+  overflow: hidden;
+  animation: toast-in 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
 
-@keyframes hype-pop {
-  from { transform: translateY(-6px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+.hype-toast.hype-toast-out {
+  animation: toast-out 0.3s ease-in forwards;
 }
 
-.hype-card-inner {
+@keyframes toast-in {
+  from { transform: translateX(-50%) translateY(120%); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+@keyframes toast-out {
+  from { transform: translateX(-50%) translateY(0);    opacity: 1; }
+  to   { transform: translateX(-50%) translateY(120%); opacity: 0; }
+}
+
+.hype-toast-inner {
   display: flex;
   align-items: flex-start;
   gap: 14px;
+  padding: 16px 18px 14px;
 }
 
-.hype-icon-inline {
+.hype-toast-icon {
   font-size: 2rem;
   flex-shrink: 0;
   line-height: 1;
   margin-top: 2px;
 }
 
-.hype-title-inline {
+.hype-toast-title {
   font-family: var(--font);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--gold-light);
   margin-bottom: 4px;
 }
 
-.hype-msg-inline {
-  font-size: 0.88rem;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.5;
+.hype-toast-msg {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.45;
+}
+
+.hype-toast-bar {
+  height: 3px;
+  background: var(--gold-light);
+  width: 100%;
 }
 
 .btn-primary {
