@@ -47,6 +47,48 @@
         <p style="padding:16px 20px">The Masters has started — picks are locked. Contact the admin if you have questions.</p>
       </div>
 
+      <!-- How it works -->
+      <section class="admin-section" id="howItWorks">
+        <h2>How It Works</h2>
+        <div class="instructions-grid">
+          <div class="instr-step">
+            <div class="instr-num">1</div>
+            <div>
+              <strong>Pick one golfer from each tier</strong>
+              <p>Tiers 1–4 are required. Tier 5 is optional but can only help you.</p>
+            </div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">2</div>
+            <div>
+              <strong>Tiers are based on odds</strong>
+              <p>Tier 1 = favorites, Tier 5 = longshots. Every team gets one elite pick and some underdogs.</p>
+            </div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">3</div>
+            <div>
+              <strong>Team score = sum of your golfers, minus the worst each round</strong>
+              <p>Each round, the highest (worst) score among your golfers is dropped. Lower total wins.</p>
+            </div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">4</div>
+            <div>
+              <strong>Missed cuts get a penalty</strong>
+              <p>If your golfer misses the cut, they receive the average of the 10 worst scores for rounds 3 &amp; 4.</p>
+            </div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">5</div>
+            <div>
+              <strong>Pay your $<span id="buyInInstr">7</span> buy-in</strong>
+              <p>Venmo <strong>@Jack-Raber</strong> after submitting. You're not officially in until you've paid.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Entry form -->
       <section class="admin-section" id="formSection">
         <h2>Choose Your Golfers</h2>
@@ -143,6 +185,16 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Hype modal (1-in-3 chance after submission) -->
+  <div id="hypeOverlay" class="hype-overlay" style="display:none" onclick="closeHype()">
+    <div class="hype-card" onclick="event.stopPropagation()">
+      <div class="hype-icon" id="hypeIcon">🔥</div>
+      <h2 id="hypeTitle"></h2>
+      <p id="hypeMsg"></p>
+      <button class="btn-primary" onclick="closeHype()" style="margin-top:16px;width:100%">Let's Go!</button>
+    </div>
   </div>
 
   <script src="/js/picks.js"></script>
