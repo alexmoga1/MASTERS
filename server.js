@@ -6,6 +6,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'masters2026';
+const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'masters123';
 
 // Cache live scores for 60 seconds
 let scoreCache = { data: null, timestamp: 0 };
@@ -461,14 +462,56 @@ app.delete('/api/entries/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// Update settings (penalty scores, buy-in, etc.)
+// Public pick submission
+app.post('/api/submit', (req, res) => {
+  const { code, name, picks } = req.body;
+  if (code !== SUBMIT_CODE) return res.status(401).json({ error: 'Invalid access code' });
+
+  const data = loadData();
+
+  if (data.settings.locked) {
+    return res.status(403).json({ error: 'Submissions are closed. The tournament has started.' });
+  }
+
+  if (!name || !name.trim()) return res.status(400).json({ error: 'Name required' });
+  if (!picks || picks.length < 4) return res.status(400).json({ error: 'Picks for Tiers 1–4 are required' });
+
+  // Validate each pick exists in the correct tier
+  const tierKeys = ['tier1', 'tier2', 'tier3', 'tier4', 'tier5'];
+  for (let i = 0; i < 4; i++) {
+    const tierGolfers = (data.tiers[tierKeys[i]] || []).map(g => g.name);
+    if (!tierGolfers.includes(picks[i])) {
+      return res.status(400).json({ error: `"${picks[i]}" is not a valid Tier ${i + 1} pick` });
+    }
+  }
+  if (picks[4]) {
+    const tier5Golfers = (data.tiers.tier5 || []).map(g => g.name);
+    if (!tier5Golfers.includes(picks[4])) {
+      return res.status(400).json({ error: `"${picks[4]}" is not a valid Tier 5 pick` });
+    }
+  }
+
+  if (data.participants.find(p => p.name.toLowerCase() === name.trim().toLowerCase())) {
+    return res.status(400).json({ error: 'That name is already taken. Contact the admin if you need to make changes.' });
+  }
+
+  const id = `${name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${Date.now()}`;
+  const participant = { id, name: name.trim(), paid: false, picks };
+  data.participants.push(participant);
+  saveData(data);
+
+  res.json(participant);
+});
+
+// Update settings (penalty scores, buy-in, locked, etc.)
 app.post('/api/settings', (req, res) => {
-  const { password, penaltyScores, buyIn } = req.body;
+  const { password, penaltyScores, buyIn, locked } = req.body;
   if (password !== ADMIN_PASSWORD) return res.status(401).json({ error: 'Invalid password' });
 
   const data = loadData();
   if (penaltyScores !== undefined) data.penaltyScores = penaltyScores;
   if (buyIn !== undefined) data.settings.buyIn = Number(buyIn);
+  if (locked !== undefined) data.settings.locked = !!locked;
   saveData(data);
 
   res.json({ success: true });

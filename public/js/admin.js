@@ -92,6 +92,14 @@ async function loadSettings() {
     const el = document.getElementById('sPenalty4');
     if (el) el.placeholder = `Auto: ${fmtNum(p.round4)}`;
   }
+
+  const lockStatusEl = document.getElementById('lockStatus');
+  if (lockStatusEl) {
+    lockStatusEl.textContent = s.locked
+      ? 'Status: Submissions are LOCKED. New picks cannot be submitted.'
+      : 'Status: Submissions are OPEN. Participants can submit picks at /picks.';
+    lockStatusEl.style.color = s.locked ? 'var(--red)' : '#166534';
+  }
 }
 
 function fmtNum(n) {
@@ -291,6 +299,36 @@ async function saveSettings(e) {
     }, 3000);
   } catch (err) {
     document.getElementById('settingsErr').textContent = 'Network error.';
+  }
+}
+
+// ── Submission lock ───────────────────────────────────────────────────────────
+
+async function setLock(locked) {
+  const msg = document.getElementById('lockMsg');
+  msg.textContent = '';
+
+  try {
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, locked })
+    });
+
+    const result = await res.json();
+    if (!res.ok) {
+      msg.textContent = result.error || 'Error updating lock.';
+      msg.style.color = 'var(--red)';
+      return;
+    }
+
+    msg.style.color = '#166534';
+    msg.textContent = locked ? 'Submissions locked.' : 'Submissions unlocked.';
+    await loadSettings();
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+  } catch (err) {
+    msg.textContent = 'Network error.';
+    msg.style.color = 'var(--red)';
   }
 }
 

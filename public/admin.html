@@ -158,6 +158,17 @@
         </form>
       </section>
 
+      <!-- Submission lock -->
+      <section class="admin-section">
+        <h2>Submissions</h2>
+        <p id="lockStatus">Loading…</p>
+        <div style="padding:0 20px 20px;display:flex;gap:10px">
+          <button class="btn-primary" onclick="setLock(true)">Lock Submissions</button>
+          <button class="btn-secondary" onclick="setLock(false)">Unlock Submissions</button>
+        </div>
+        <p id="lockMsg" class="form-ok" style="padding:0 20px 16px"></p>
+      </section>
+
       <!-- Score cache refresh -->
       <section class="admin-section">
         <h2>Live Scores</h2>

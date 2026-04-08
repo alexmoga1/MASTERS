@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Your Picks — 2026 Masters Pool</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- Access Code Gate -->
+  <div id="codeGate" class="auth-gate">
+    <div class="auth-card">
+      <div class="auth-flag">⛳</div>
+      <h2>Submit Your Picks</h2>
+      <p>2026 Masters Pool</p>
+      <input
+        type="text"
+        id="codeInput"
+        placeholder="Enter access code"
+        autocomplete="off"
+        onkeydown="if(event.key==='Enter') unlock()"
+      />
+      <button onclick="unlock()">Continue</button>
+      <p class="auth-err" id="codeErr"></p>
+    </div>
+  </div>
+
+  <!-- Picks Form (hidden until code entered) -->
+  <div id="picksPanel" style="display:none">
+    <header>
+      <div class="header-inner">
+        <div class="header-flag">⛳</div>
+        <div class="header-text">
+          <h1>Submit Your Picks</h1>
+          <p class="header-sub">2026 Masters Pool</p>
+        </div>
+        <a href="/" class="back-btn">← Leaderboard</a>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- Locked message (shown if submissions closed) -->
+      <div id="lockedMsg" class="admin-section" style="display:none">
+        <h2>Submissions Closed</h2>
+        <p style="padding:16px 20px">The Masters has started — picks are locked. Contact the admin if you have questions.</p>
+      </div>
+
+      <!-- Entry form -->
+      <section class="admin-section" id="formSection">
+        <h2>Choose Your Golfers</h2>
+        <form id="picksForm" onsubmit="submitPicks(event)">
+
+          <div class="form-grid">
+
+            <div class="form-group" style="grid-column:1/-1">
+              <label>Your Name *</label>
+              <input type="text" id="pName" placeholder="e.g. Jane D" required autocomplete="off" />
+              <span class="picks-hint">Use a unique name — first name + last initial works well.</span>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 1 Pick *</label>
+              <select id="pTier1" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 2 Pick *</label>
+              <select id="pTier2" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 3 Pick *</label>
+              <select id="pTier3" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 4 Pick *</label>
+              <select id="pTier4" required>
+                <option value="">Select golfer…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tier 5 Pick <span style="font-weight:400;text-transform:none">(optional)</span></label>
+              <select id="pTier5">
+                <option value="">No Tier 5 pick</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div style="padding:0 20px 20px">
+            <button type="submit" class="btn-primary" id="submitBtn" style="width:100%;padding:12px">
+              Submit My Picks
+            </button>
+            <p class="form-err" id="picksErr" style="margin-top:10px"></p>
+          </div>
+
+        </form>
+      </section>
+
+    </main>
+
+    <footer>
+      <span>$<span id="buyIn">7</span> buy-in · Venmo <strong>@Jack-Raber</strong></span>
+      <span class="footer-divider">·</span>
+      <a href="/" class="admin-link">← Leaderboard</a>
+    </footer>
+  </div>
+
+  <!-- Confirmation (shown after successful submit) -->
+  <div id="confirmPanel" style="display:none">
+    <header>
+      <div class="header-inner">
+        <div class="header-flag">⛳</div>
+        <div class="header-text">
+          <h1>You're In!</h1>
+          <p class="header-sub">2026 Masters Pool</p>
+        </div>
+        <a href="/" class="back-btn">← Leaderboard</a>
+      </div>
+    </header>
+    <main>
+      <section class="admin-section">
+        <h2>Picks Confirmed</h2>
+        <div style="padding:24px 20px">
+          <p style="margin-bottom:16px;font-size:1rem">Your picks have been submitted, <strong id="confirmName"></strong>!</p>
+          <div class="golfer-grid" id="confirmPicks"></div>
+          <p style="margin-top:20px;color:var(--gray-600);font-size:0.88rem">
+            Don't forget to pay your $<span id="confirmBuyIn">7</span> buy-in via Venmo <strong>@Jack-Raber</strong>.
+          </p>
+          <a href="/" class="btn-primary" style="display:inline-block;margin-top:16px;text-decoration:none">
+            View Leaderboard
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/picks.js"></script>
+</body>
+</html>

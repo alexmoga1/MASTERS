@@ -102,6 +102,21 @@ header {
 }
 
 /* ── Back / Admin link in header ────────────────────────────────────────────── */
+.picks-header-btn {
+  color: var(--green-dark);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: none;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: var(--gold-light);
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+.picks-header-btn:hover { background: var(--gold); }
+
 .admin-header-btn {
   color: var(--gold-light);
   text-decoration: none;
@@ -567,6 +582,7 @@ footer {
 
 .form-err { color: var(--red); font-size: 0.82rem; grid-column: 1/-1; }
 .form-ok  { color: #166534; font-size: 0.82rem; grid-column: 1/-1; }
+.picks-hint { font-size: 0.78rem; color: var(--gray-400); margin-top: 2px; }
 
 .btn-primary {
   padding: 9px 20px;
