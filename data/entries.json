@@ -3,7 +3,7 @@
     {
       "id": "miles-e",
       "name": "Miles E",
-      "paid": false,
+      "paid": true,
       "picks": [
         "Jon Rahm",
         "Matt Fitzpatrick",
@@ -27,7 +27,7 @@
     {
       "id": "alex-l",
       "name": "Alex L",
-      "paid": false,
+      "paid": true,
       "picks": [
         "Bryson DeChambeau",
         "Tommy Fleetwood",
@@ -74,7 +74,7 @@
     {
       "id": "naoki-e",
       "name": "Naoki E",
-      "paid": false,
+      "paid": true,
       "picks": [
         "Scottie Scheffler",
         "Cam Young",
@@ -105,6 +105,90 @@
         "Patrick Reed",
         "Viktor Hovland",
         "Corey Conners"
+      ]
+    },
+    {
+      "id": "asher-w-1775706182260",
+      "name": "Asher W",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Tommy Fleetwood",
+        "Jordan Spieth",
+        "Justin Thomas",
+        "Nicolai Hojgaard"
+      ]
+    },
+    {
+      "id": "henry-c-1775706182260",
+      "name": "Henry C",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Collin Morikawa",
+        "Min Woo Lee",
+        "Akshay Bhatia",
+        "JJ Spaun"
+      ]
+    },
+    {
+      "id": "noah-l-1775706182260",
+      "name": "Noah L",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Tommy Fleetwood",
+        "Justin Rose",
+        "Akshay Bhatia",
+        "Sam Burns"
+      ]
+    },
+    {
+      "id": "taylor-m-1775706182260",
+      "name": "Taylor M",
+      "paid": false,
+      "picks": [
+        "Bryson DeChambeau",
+        "Cam Young",
+        "Patrick Reed",
+        "Akshay Bhatia",
+        "Shane Lowry"
+      ]
+    },
+    {
+      "id": "isaac-l-1775706182260",
+      "name": "Isaac L",
+      "paid": true,
+      "picks": [
+        "Ludvig Aberg",
+        "Matt Fitzpatrick",
+        "Patrick Reed",
+        "Akshay Bhatia",
+        "Nicolai Hojgaard"
+      ]
+    },
+    {
+      "id": "turley-c-1775706182260",
+      "name": "Turley C",
+      "paid": false,
+      "picks": [
+        "Xander Schauffele",
+        "Tommy Fleetwood",
+        "Justin Rose",
+        "Akshay Bhatia",
+        "Daniel Berger"
+      ]
+    },
+    {
+      "id": "trevor-w-1775706182260",
+      "name": "Trevor W",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Matt Fitzpatrick",
+        "Brooks Koepka",
+        "Viktor Hovland",
+        "Adam Scott"
       ]
     }
   ],
@@ -215,6 +299,14 @@
     ],
     "tier5": [
       {
+        "name": "Adam Scott",
+        "odds": 6000
+      },
+      {
+        "name": "Shane Lowry",
+        "odds": 6600
+      },
+      {
         "name": "Sam Burns",
         "odds": 7200
       },
@@ -223,16 +315,20 @@
         "odds": 8000
       },
       {
+        "name": "Nicolai Hojgaard",
+        "odds": 8500
+      },
+      {
         "name": "Corey Conners",
         "odds": 9000
       },
       {
-        "name": "Tiger Woods",
-        "odds": 12500
-      },
-      {
         "name": "Daniel Berger",
         "odds": 12000
+      },
+      {
+        "name": "Tiger Woods",
+        "odds": 12500
       },
       {
         "name": "JJ Spaun",

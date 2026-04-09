@@ -367,7 +367,7 @@ main {
 /* Score colors */
 .score-under { color: var(--red); font-weight: 600; }
 .score-even  { color: var(--gray-800); }
-.score-over  { color: var(--blue); }
+.score-over  { color: var(--gray-800); }
 .score-dash  { color: var(--gray-400); }
 
 /* Expand row */

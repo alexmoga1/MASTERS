@@ -164,6 +164,21 @@ const GOLFER_HYPE = {
     { icon: '😤', title: 'Comeback szn pick goes hard', msg: 'Berger is playing with a chip on his shoulder the size of Augusta National. That energy is going to translate into birdies.' },
     { icon: '🎯', title: 'The underdog with receipts', msg: 'People slept on Berger. You didn\'t. If he has a week, you\'re going to look like the smartest person in the pool. easily.' }
   ],
+  'Nicolai Hojgaard': [
+    { icon: '🇩🇰', title: 'THE DANE IS COMING AND NOBODY IS READY', msg: 'Nicolai Hojgaard is one of the most underrated players in the world and you just found him. This pick is going to age beautifully.' },
+    { icon: '🔥', title: 'Hojgaard said "let me cook" and we believe him', msg: 'Big game, bigger potential, and zero pressure on him this week. That combination at Augusta is genuinely dangerous. great find.' },
+    { icon: '🌊', title: 'Sleeper alert of the entire tournament', msg: 'Nobody outside of golf nerds knows who Hojgaard is. By Sunday they will. And you called it first. respect.' }
+  ],
+  'Shane Lowry': [
+    { icon: '🍀', title: 'THE CLARET JUG WINNER HAS ENTERED THE CHAT', msg: 'Shane Lowry is a major champion who plays with absolute heart and zero fucks given. When he\'s on, he is must-watch television.' },
+    { icon: '😤', title: 'Lowry is built for big moments and this is the biggest one', msg: 'He won the Open Championship in a storm and didn\'t blink. Augusta doesn\'t scare Shane Lowry. Nothing does. fire pick.' },
+    { icon: '🎯', title: 'The Irishman has unfinished business at Augusta', msg: 'Consistent, clutch, and criminally underrated at the Masters. Lowry is going to make some noise this week and you\'re riding it.' }
+  ],
+  'Adam Scott': [
+    { icon: '🟡', title: 'A FORMER MASTERS CHAMPION IS NEVER A BAD PICK. EVER.', msg: 'Adam Scott won the green jacket in 2013 and he has never stopped loving this place. The smoothest swing in golf is still dangerous.' },
+    { icon: '🎩', title: 'The smoothest man in golf said he\'s still got it', msg: 'Adam Scott\'s ball-striking is genuinely beautiful and Augusta rewards beauty. Veteran pick with actual upside. we respect it.' },
+    { icon: '⛳', title: 'Old school pick, timeless talent', msg: 'People keep writing Adam Scott off and he keeps showing up. This week might be the one that shuts everyone up for good. great pick.' }
+  ],
   'JJ Spaun': [
     { icon: '🎲', title: 'BRO SAID "F*** IT, SPAUN" AND WE RESPECT THE CHAOS', msg: 'Absolute swing pick and if he goes low this week you are the most popular person in this entire pool. The audacity. The vision. The swag.' },
     { icon: '🤡', title: 'Certified degenerate gambler pick (affectionate)', msg: 'JJ Spaun at Augusta is a long shot. A very long shot. But long shots pay the most. You know what you\'re doing.' },
