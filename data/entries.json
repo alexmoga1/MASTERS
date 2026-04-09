@@ -54,7 +54,7 @@
       "paid": false,
       "picks": [
         "Ludvig Aberg",
-        "Cam Young",
+        "Cameron Young",
         "Patrick Reed",
         "Viktor Hovland",
         "Corey Conners"
@@ -66,7 +66,7 @@
       "paid": false,
       "picks": [
         "Xander Schauffele",
-        "Cam Young",
+        "Cameron Young",
         "Jordan Spieth",
         "Justin Thomas"
       ]
@@ -77,7 +77,7 @@
       "paid": true,
       "picks": [
         "Scottie Scheffler",
-        "Cam Young",
+        "Cameron Young",
         "Justin Rose",
         "Akshay Bhatia",
         "JJ Spaun"
@@ -149,7 +149,7 @@
       "paid": false,
       "picks": [
         "Bryson DeChambeau",
-        "Cam Young",
+        "Cameron Young",
         "Patrick Reed",
         "Akshay Bhatia",
         "Shane Lowry"
@@ -221,7 +221,7 @@
     ],
     "tier2": [
       {
-        "name": "Cam Young",
+        "name": "Cameron Young",
         "odds": 2300
       },
       {
