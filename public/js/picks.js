@@ -179,6 +179,11 @@ const GOLFER_HYPE = {
     { icon: '🎩', title: 'The smoothest man in golf said he\'s still got it', msg: 'Adam Scott\'s ball-striking is genuinely beautiful and Augusta rewards beauty. Veteran pick with actual upside. we respect it.' },
     { icon: '⛳', title: 'Old school pick, timeless talent', msg: 'People keep writing Adam Scott off and he keeps showing up. This week might be the one that shuts everyone up for good. great pick.' }
   ],
+  'Jacob Bridgeman': [
+    { icon: '🚀', title: 'WHO IS JACOB BRIDGEMAN?? exactly. that\'s the point.', msg: 'Nobody expects him. Nobody is watching him. And that\'s exactly when a guy like this goes out and shoots 65. bold pick, we respect the chaos.' },
+    { icon: '🎲', title: 'Maximum longshot energy and we are HERE for it', msg: 'Bridgeman is a big hitter with nothing to lose and everything to prove at Augusta. If he runs hot this week you are going to be famous.' },
+    { icon: '🔥', title: 'The most unhinged Tier 5 pick in the pool and that\'s a compliment', msg: 'You didn\'t play it safe. You didn\'t pick Tiger. You picked Jacob Bridgeman and said let\'s find out. that\'s the energy.' }
+  ],
   'JJ Spaun': [
     { icon: '🎲', title: 'BRO SAID "F*** IT, SPAUN" AND WE RESPECT THE CHAOS', msg: 'Absolute swing pick and if he goes low this week you are the most popular person in this entire pool. The audacity. The vision. The swag.' },
     { icon: '🤡', title: 'Certified degenerate gambler pick (affectionate)', msg: 'JJ Spaun at Augusta is a long shot. A very long shot. But long shots pay the most. You know what you\'re doing.' },

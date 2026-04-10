@@ -39,7 +39,7 @@
     {
       "id": "john-c",
       "name": "John C",
-      "paid": false,
+      "paid": true,
       "picks": [
         "Bryson DeChambeau",
         "Tommy Fleetwood",
@@ -68,7 +68,8 @@
         "Xander Schauffele",
         "Cameron Young",
         "Jordan Spieth",
-        "Justin Thomas"
+        "Justin Thomas",
+        "JJ Spaun"
       ]
     },
     {
@@ -189,6 +190,90 @@
         "Brooks Koepka",
         "Viktor Hovland",
         "Adam Scott"
+      ]
+    },
+    {
+      "id": "abe-e-1775789855417",
+      "name": "Abe E",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Cameron Young",
+        "Min Woo Lee",
+        "Viktor Hovland",
+        "Adam Scott"
+      ]
+    },
+    {
+      "id": "jennifer-1775789855417",
+      "name": "Jennifer",
+      "paid": true,
+      "picks": [
+        "Jon Rahm",
+        "Tommy Fleetwood",
+        "Justin Rose",
+        "Akshay Bhatia",
+        "Jacob Bridgeman"
+      ]
+    },
+    {
+      "id": "hanson-m-1775789855417",
+      "name": "Hanson M",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Collin Morikawa",
+        "Jordan Spieth",
+        "Justin Thomas",
+        "Maverick McNealy"
+      ]
+    },
+    {
+      "id": "alex-m-1775789855417",
+      "name": "Alex M",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Collin Morikawa",
+        "Chris Gotterup",
+        "Viktor Hovland",
+        "Sam Burns"
+      ]
+    },
+    {
+      "id": "daniel-m-1775789855417",
+      "name": "Daniel M",
+      "paid": true,
+      "picks": [
+        "Jon Rahm",
+        "Tommy Fleetwood",
+        "Jordan Spieth",
+        "Akshay Bhatia",
+        "JJ Spaun"
+      ]
+    },
+    {
+      "id": "billy-e-1775789855417",
+      "name": "Billy E",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Cameron Young",
+        "Min Woo Lee",
+        "Si Woo Kim",
+        "Maverick McNealy"
+      ]
+    },
+    {
+      "id": "barry-1775789855417",
+      "name": "Barry",
+      "paid": false,
+      "picks": [
+        "Ludvig Aberg",
+        "Cameron Young",
+        "Jordan Spieth",
+        "Justin Thomas",
+        "Shane Lowry"
       ]
     }
   ],
@@ -332,6 +417,10 @@
       },
       {
         "name": "JJ Spaun",
+        "odds": 15000
+      },
+      {
+        "name": "Jacob Bridgeman",
         "odds": 15000
       }
     ]
