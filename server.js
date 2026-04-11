@@ -236,7 +236,7 @@ function autoPenalty(liveScores, roundIdx, n = 10) {
 
   if (scores.length === 0) return null;
   const sample = scores.slice(0, Math.min(n, scores.length));
-  return Math.round((sample.reduce((s, v) => s + v, 0) / sample.length) * 10) / 10;
+  return Math.round(sample.reduce((s, v) => s + v, 0) / sample.length);
 }
 
 function calculateLeaderboard(participants, liveScores, manualPenalty) {
