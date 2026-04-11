@@ -416,8 +416,33 @@ tr.detail-row.open .detail-inner { display: block; }
 .round-pill.under { background: #fee2e2; color: var(--red); }
 .round-pill.over  { background: #dbeafe; color: var(--blue); }
 .round-pill.even  { background: var(--gray-200); }
-.round-pill.penalty { background: #fef9c3; color: #92400e; }
+.round-pill.penalty { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; font-style: italic; }
 .round-pill.dropped-round { opacity: 0.45; text-decoration: line-through; }
+
+.mc-badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+
+.penalty-bar {
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 0.78rem;
+  color: #92400e;
+  background: #fef9c3;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
 
 .dropped-note {
   font-size: 0.72rem;

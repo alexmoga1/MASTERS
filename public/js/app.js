@@ -138,11 +138,12 @@ function renderGolferCards(participant) {
           else if (score > 0) cls += ' over';
           else cls += ' even';
           if (dropped) cls += ' dropped-round';
-          return `<span class="${cls}" title="Round ${ri+1}${dropped ? ' (dropped)' : ''}${isPenalty ? ' (penalty)' : ''}">R${ri+1}: ${fmt(score)}</span>`;
+          const label = isPenalty ? `CUT PEN: ${fmt(score)}` : `R${ri+1}: ${fmt(score)}`;
+          return `<span class="${cls}" title="Round ${ri+1}${dropped ? ' (dropped)' : ''}${isPenalty ? ' — missed cut penalty' : ''}">${label}</span>`;
         }).join('');
 
         const statusTag = mc
-          ? '<span style="color:#9a9a8e;font-size:0.72rem"> · MC</span>'
+          ? '<span class="mc-badge"> MISSED CUT</span>'
           : (g.thru && g.thru !== '-' && g.thru !== 'F'
               ? `<span style="font-size:0.72rem;color:#9a9a8e"> · Thru ${g.thru}</span>`
               : '');
@@ -183,6 +184,22 @@ function toggleDetail(id) {
   }
 }
 
+// ── Penalty info bar ─────────────────────────────────────────────────────────
+
+function renderPenalties(data) {
+  const el = document.getElementById('penaltyBar');
+  if (!el) return;
+  const p = data.penalties;
+  if (!p || (p.round3 === null && p.round4 === null)) {
+    el.style.display = 'none';
+    return;
+  }
+  const r3 = p.round3 !== null ? `R3: ${fmt(p.round3)}` : 'R3: —';
+  const r4 = p.round4 !== null ? `R4: ${fmt(p.round4)}` : 'R4: —';
+  el.style.display = 'block';
+  el.innerHTML = `✂ Missed cut penalty (avg of 10 worst active scores) &nbsp;·&nbsp; ${r3} &nbsp;·&nbsp; ${r4}`;
+}
+
 // ── Fetch & update ───────────────────────────────────────────────────────────
 
 async function load() {
@@ -193,6 +210,7 @@ async function load() {
 
     renderPrizes(data);
     renderLeaderboard(data);
+    renderPenalties(data);
 
     const liveDot = document.getElementById('liveDot');
     const lastUpdated = document.getElementById('lastUpdated');
