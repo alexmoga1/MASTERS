@@ -5,8 +5,8 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'open2026';
-const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'open123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'us2026';
+const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'us123';
 // U.S. Open 2026 first tee — June 18, 2026 6:35am ET = 10:35am UTC
 const SUBMISSION_DEADLINE = new Date('2026-06-18T10:35:00Z');
 

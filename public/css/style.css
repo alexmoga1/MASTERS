@@ -2,20 +2,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --green: #1a5c38;
-  --green-dark: #0f3d25;
-  --green-light: #2d7a50;
-  --gold: #c9a84c;
-  --gold-light: #e6c96a;
-  --cream: #faf8f3;
+  /* U.S. Open red / white / blue theme.
+     The app is themed through these tokens: --green* = the navy base,
+     --gold* = red/white accents. Re-pointing them re-skins the whole site. */
+  --green: #0a3161;        /* Old Glory navy (primary) */
+  --green-dark: #041e42;   /* deep navy */
+  --green-light: #1d4e89;
+  --gold: #b31942;         /* Old Glory red (accent) */
+  --gold-light: #ffffff;   /* white (on-navy text & buttons) */
+  --navy: #0a3161;
+  --usa-red: #b31942;
+  --cream: #eef2f9;        /* cool off-white background */
   --white: #ffffff;
-  --gray-100: #f5f5f0;
-  --gray-200: #e8e8e2;
-  --gray-400: #9a9a8e;
-  --gray-600: #5c5c52;
-  --gray-800: #2a2a24;
-  --red: #c0392b;
-  --blue: #2563eb;
+  --gray-100: #f1f4fa;
+  --gray-200: #dfe4ee;
+  --gray-400: #8a93a6;
+  --gray-600: #4d5666;
+  --gray-800: #1c2433;
+  --red: #b31942;
+  --blue: #0a3161;
   --shadow: 0 2px 8px rgba(0,0,0,0.12);
   --shadow-lg: 0 4px 20px rgba(0,0,0,0.18);
   --radius: 8px;
@@ -835,3 +840,52 @@ footer {
   .prize-divider { display: none; }
   .prize-banner  { gap: 4px; }
 }
+
+/* ── U.S. Open red/white/blue flair ──────────────────────────────────────────── */
+
+/* Brand emblem (replaces the old ⛳ emoji) */
+.header-logo {
+  width: 42px;
+  height: 42px;
+  display: block;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+}
+
+.auth-logo {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 12px;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+}
+
+/* Old Glory stripe under the header */
+header { border-bottom: 4px solid var(--usa-red); }
+
+/* Stars-and-stripes accent strip on banners */
+.prize-banner,
+.picks-cta {
+  border-top: 3px solid var(--usa-red);
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+}
+
+/* Title pops white; the gold-accent labels go patriotic red */
+.header-text h1 { color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+.prize-item .place { color: #ff8aa0; }
+
+/* Leader badge: white text on red reads better than navy-on-red */
+.pos-1 { color: #ffffff; }
+
+/* Keep button labels legible on the red hover state */
+.picks-header-btn:hover,
+.picks-cta-btn:hover { color: #ffffff; }
+
+/* Live dot in patriotic blue rather than green */
+.live-dot { background: #4aa3ff; box-shadow: 0 0 0 0 rgba(74,163,255,0.6); }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(74,163,255,0.6); }
+  70%  { box-shadow: 0 0 0 6px rgba(74,163,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(74,163,255,0); }
+}
+.live-dot.stale { background: var(--usa-red); }
