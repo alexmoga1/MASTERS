@@ -1,5 +1,18 @@
 {
-  "participants": [],
+  "participants": [
+    {
+      "id": "mooooggggaaaaa-1750100000000",
+      "name": "MOOOOGGGGAAAAA",
+      "paid": false,
+      "picks": [
+        "Scottie Scheffler",
+        "Cameron Young",
+        "Sam Burns",
+        "Wyndham Clark",
+        "Justin Rose"
+      ]
+    }
+  ],
   "tiers": {
     "tier1": [
       {
@@ -417,7 +430,7 @@
     ]
   },
   "settings": {
-    "buyIn": 7,
+    "buyIn": 10,
     "par": 70,
     "year": 2026,
     "tournamentName": "U.S. Open",

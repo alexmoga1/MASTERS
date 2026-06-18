@@ -2,7 +2,7 @@
 
 let accessCode = '';
 let tiers = null;
-let buyInAmount = 7;
+let buyInAmount = 10;
 
 // U.S. Open 2026 first tee — June 18, 2026 6:35am ET = 10:35am UTC
 const SUBMISSION_DEADLINE = new Date('2026-06-18T10:35:00Z');
