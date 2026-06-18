@@ -1,434 +1,429 @@
 {
-  "participants": [
-    {
-      "id": "miles-e",
-      "name": "Miles E",
-      "paid": true,
-      "picks": [
-        "Jon Rahm",
-        "Matt Fitzpatrick",
-        "Min Woo Lee",
-        "Russell Henley",
-        "Maverick McNealy"
-      ]
-    },
-    {
-      "id": "sam-l",
-      "name": "Sam L",
-      "paid": true,
-      "picks": [
-        "Ludvig Aberg",
-        "Hideki Matsuyama",
-        "Brooks Koepka",
-        "Viktor Hovland",
-        "Sam Burns"
-      ]
-    },
-    {
-      "id": "alex-l",
-      "name": "Alex L",
-      "paid": true,
-      "picks": [
-        "Bryson DeChambeau",
-        "Tommy Fleetwood",
-        "Brooks Koepka",
-        "Justin Thomas",
-        "Sam Burns"
-      ]
-    },
-    {
-      "id": "john-c",
-      "name": "John C",
-      "paid": true,
-      "picks": [
-        "Bryson DeChambeau",
-        "Tommy Fleetwood",
-        "Patrick Reed",
-        "Akshay Bhatia",
-        "Daniel Berger"
-      ]
-    },
-    {
-      "id": "evan-i",
-      "name": "Evan I",
-      "paid": false,
-      "picks": [
-        "Ludvig Aberg",
-        "Cameron Young",
-        "Patrick Reed",
-        "Viktor Hovland",
-        "Corey Conners"
-      ]
-    },
-    {
-      "id": "alpha-j",
-      "name": "Alpha J",
-      "paid": false,
-      "picks": [
-        "Xander Schauffele",
-        "Cameron Young",
-        "Jordan Spieth",
-        "Justin Thomas",
-        "JJ Spaun"
-      ]
-    },
-    {
-      "id": "naoki-e",
-      "name": "Naoki E",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Cameron Young",
-        "Justin Rose",
-        "Akshay Bhatia",
-        "JJ Spaun"
-      ]
-    },
-    {
-      "id": "adam-l",
-      "name": "Adam L",
-      "paid": false,
-      "picks": [
-        "Bryson DeChambeau",
-        "Hideki Matsuyama",
-        "Justin Rose",
-        "Justin Thomas",
-        "Sam Burns"
-      ]
-    },
-    {
-      "id": "jack-r",
-      "name": "Jack R",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Tommy Fleetwood",
-        "Patrick Reed",
-        "Viktor Hovland",
-        "Corey Conners"
-      ]
-    },
-    {
-      "id": "asher-w-1775706182260",
-      "name": "Asher W",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Tommy Fleetwood",
-        "Jordan Spieth",
-        "Justin Thomas",
-        "Nicolai Højgaard"
-      ]
-    },
-    {
-      "id": "henry-c-1775706182260",
-      "name": "Henry C",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Collin Morikawa",
-        "Min Woo Lee",
-        "Akshay Bhatia",
-        "JJ Spaun"
-      ]
-    },
-    {
-      "id": "noah-l-1775706182260",
-      "name": "Noah L",
-      "paid": true,
-      "picks": [
-        "Rory McIlroy",
-        "Tommy Fleetwood",
-        "Justin Rose",
-        "Akshay Bhatia",
-        "Sam Burns"
-      ]
-    },
-    {
-      "id": "taylor-m-1775706182260",
-      "name": "Taylor M",
-      "paid": false,
-      "picks": [
-        "Bryson DeChambeau",
-        "Cameron Young",
-        "Patrick Reed",
-        "Akshay Bhatia",
-        "Shane Lowry"
-      ]
-    },
-    {
-      "id": "isaac-l-1775706182260",
-      "name": "Isaac L",
-      "paid": true,
-      "picks": [
-        "Ludvig Aberg",
-        "Matt Fitzpatrick",
-        "Patrick Reed",
-        "Akshay Bhatia",
-        "Nicolai Højgaard"
-      ]
-    },
-    {
-      "id": "turley-c-1775706182260",
-      "name": "Turley C",
-      "paid": false,
-      "picks": [
-        "Xander Schauffele",
-        "Tommy Fleetwood",
-        "Justin Rose",
-        "Akshay Bhatia",
-        "Daniel Berger"
-      ]
-    },
-    {
-      "id": "trevor-w-1775706182260",
-      "name": "Trevor W",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Matt Fitzpatrick",
-        "Brooks Koepka",
-        "Viktor Hovland",
-        "Adam Scott"
-      ]
-    },
-    {
-      "id": "abe-e-1775789855417",
-      "name": "Abe E",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Cameron Young",
-        "Min Woo Lee",
-        "Viktor Hovland",
-        "Adam Scott"
-      ]
-    },
-    {
-      "id": "jennifer-1775789855417",
-      "name": "Jennifer",
-      "paid": true,
-      "picks": [
-        "Jon Rahm",
-        "Tommy Fleetwood",
-        "Justin Rose",
-        "Akshay Bhatia",
-        "Jacob Bridgeman"
-      ]
-    },
-    {
-      "id": "hanson-m-1775789855417",
-      "name": "Hanson M",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Collin Morikawa",
-        "Jordan Spieth",
-        "Justin Thomas",
-        "Maverick McNealy"
-      ]
-    },
-    {
-      "id": "alex-m-1775789855417",
-      "name": "Alex M",
-      "paid": true,
-      "picks": [
-        "Scottie Scheffler",
-        "Collin Morikawa",
-        "Chris Gotterup",
-        "Viktor Hovland",
-        "Sam Burns"
-      ]
-    },
-    {
-      "id": "daniel-m-1775789855417",
-      "name": "Daniel M",
-      "paid": true,
-      "picks": [
-        "Jon Rahm",
-        "Tommy Fleetwood",
-        "Jordan Spieth",
-        "Akshay Bhatia",
-        "JJ Spaun"
-      ]
-    },
-    {
-      "id": "billy-e-1775789855417",
-      "name": "Billy E",
-      "paid": true,
-      "picks": [
-        "Rory McIlroy",
-        "Cameron Young",
-        "Min Woo Lee",
-        "Si Woo Kim",
-        "Maverick McNealy"
-      ]
-    },
-    {
-      "id": "barry-1775789855417",
-      "name": "Barry",
-      "paid": false,
-      "picks": [
-        "Ludvig Aberg",
-        "Cameron Young",
-        "Jordan Spieth",
-        "Justin Thomas",
-        "Shane Lowry"
-      ]
-    }
-  ],
+  "participants": [],
   "tiers": {
     "tier1": [
       {
         "name": "Scottie Scheffler",
-        "odds": 495
-      },
-      {
-        "name": "Jon Rahm",
-        "odds": 910
-      },
-      {
-        "name": "Bryson DeChambeau",
-        "odds": 1075
+        "odds": 723
       },
       {
         "name": "Rory McIlroy",
-        "odds": 1175
-      },
-      {
-        "name": "Ludvig Aberg",
-        "odds": 1700
+        "odds": 1611
       },
       {
         "name": "Xander Schauffele",
-        "odds": 1800
+        "odds": 2014
+      },
+      {
+        "name": "Jon Rahm",
+        "odds": 2108
       }
     ],
     "tier2": [
       {
-        "name": "Cameron Young",
-        "odds": 2300
-      },
-      {
         "name": "Tommy Fleetwood",
-        "odds": 2300
+        "odds": 2376
       },
       {
         "name": "Matt Fitzpatrick",
-        "odds": 2350
+        "odds": 2432
       },
       {
-        "name": "Hideki Matsuyama",
-        "odds": 2700
+        "name": "Ludvig Aberg",
+        "odds": 2775
       },
       {
-        "name": "Collin Morikawa",
-        "odds": 3100
-      },
-      {
-        "name": "Robert MacIntyre",
-        "odds": 3400
+        "name": "Cameron Young",
+        "odds": 2993
       }
     ],
     "tier3": [
       {
-        "name": "Min Woo Lee",
-        "odds": 3500
+        "name": "Si Woo Kim",
+        "odds": 3900
       },
       {
-        "name": "Justin Rose",
-        "odds": 3500
+        "name": "Russell Henley",
+        "odds": 4491
       },
       {
-        "name": "Brooks Koepka",
-        "odds": 3700
+        "name": "Sam Burns",
+        "odds": 4806
       },
       {
-        "name": "Chris Gotterup",
-        "odds": 4200
+        "name": "Bryson DeChambeau",
+        "odds": 5122
       },
       {
-        "name": "Jordan Spieth",
-        "odds": 4200
+        "name": "Collin Morikawa",
+        "odds": 5518
       },
       {
-        "name": "Patrick Reed",
-        "odds": 4300
+        "name": "Patrick Cantlay",
+        "odds": 5771
+      },
+      {
+        "name": "Viktor Hovland",
+        "odds": 5894
+      },
+      {
+        "name": "Justin Thomas",
+        "odds": 6345
       }
     ],
     "tier4": [
       {
-        "name": "Viktor Hovland",
-        "odds": 4500
+        "name": "J.J. Spaun",
+        "odds": 6486
       },
       {
-        "name": "Russell Henley",
-        "odds": 4700
+        "name": "Chris Gotterup",
+        "odds": 6967
       },
       {
-        "name": "Si Woo Kim",
-        "odds": 4900
+        "name": "Brooks Koepka",
+        "odds": 7086
       },
       {
-        "name": "Justin Thomas",
-        "odds": 5400
+        "name": "Tyrrell Hatton",
+        "odds": 7208
       },
       {
-        "name": "Akshay Bhatia",
-        "odds": 5700
+        "name": "Min Woo Lee",
+        "odds": 7932
       },
       {
-        "name": "Patrick Cantlay",
-        "odds": 5800
+        "name": "Kurt Kitayama",
+        "odds": 8063
+      },
+      {
+        "name": "Patrick Reed",
+        "odds": 8608
+      },
+      {
+        "name": "Wyndham Clark",
+        "odds": 8621
+      },
+      {
+        "name": "Maverick McNealy",
+        "odds": 8659
+      },
+      {
+        "name": "Robert MacIntyre",
+        "odds": 9304
       }
     ],
     "tier5": [
       {
         "name": "Adam Scott",
-        "odds": 6000
+        "odds": 9562
+      },
+      {
+        "name": "Justin Rose",
+        "odds": 9720
+      },
+      {
+        "name": "Kristoffer Reitan",
+        "odds": 9984
+      },
+      {
+        "name": "Harris English",
+        "odds": 10353
+      },
+      {
+        "name": "Ben Griffin",
+        "odds": 10711
+      },
+      {
+        "name": "Bud Cauley",
+        "odds": 10869
+      },
+      {
+        "name": "Jordan Spieth",
+        "odds": 10909
+      },
+      {
+        "name": "Hideki Matsuyama",
+        "odds": 11852
+      },
+      {
+        "name": "Aaron Rai",
+        "odds": 11876
       },
       {
         "name": "Shane Lowry",
-        "odds": 6600
+        "odds": 11900
       },
       {
-        "name": "Sam Burns",
-        "odds": 7200
+        "name": "Joaquin Niemann",
+        "odds": 12348
       },
       {
-        "name": "Maverick McNealy",
-        "odds": 8000
+        "name": "Alex Fitzpatrick",
+        "odds": 12585
+      },
+      {
+        "name": "Jake Knapp",
+        "odds": 12943
       },
       {
         "name": "Nicolai Højgaard",
-        "odds": 8500
+        "odds": 13725
       },
       {
-        "name": "Corey Conners",
-        "odds": 9000
+        "name": "David Puig",
+        "odds": 13853
       },
       {
-        "name": "Daniel Berger",
-        "odds": 12000
+        "name": "Ryan Gerard",
+        "odds": 14678
       },
       {
-        "name": "Tiger Woods",
-        "odds": 12500
-      },
-      {
-        "name": "JJ Spaun",
-        "odds": 15000
+        "name": "Alex Noren",
+        "odds": 15773
       },
       {
         "name": "Jacob Bridgeman",
-        "odds": 15000
+        "odds": 16520
+      },
+      {
+        "name": "Keegan Bradley",
+        "odds": 16707
+      },
+      {
+        "name": "Alex Smalley",
+        "odds": 17393
+      },
+      {
+        "name": "Sepp Straka",
+        "odds": 17704
+      },
+      {
+        "name": "Gary Woodland",
+        "odds": 18193
+      },
+      {
+        "name": "Keith Mitchell",
+        "odds": 18476
+      },
+      {
+        "name": "Rickie Fowler",
+        "odds": 19967
+      },
+      {
+        "name": "J.T. Poston",
+        "odds": 21483
+      },
+      {
+        "name": "Jackson Koivun",
+        "odds": 22372
+      },
+      {
+        "name": "Dustin Johnson",
+        "odds": 22542
+      },
+      {
+        "name": "Harry Hall",
+        "odds": 25874
+      },
+      {
+        "name": "Sahith Theegala",
+        "odds": 27678
+      },
+      {
+        "name": "Brian Harman",
+        "odds": 28069
+      },
+      {
+        "name": "Ryan Fox",
+        "odds": 28202
+      },
+      {
+        "name": "Jason Day",
+        "odds": 29603
+      },
+      {
+        "name": "Akshay Bhatia",
+        "odds": 30203
+      },
+      {
+        "name": "Andrew Novak",
+        "odds": 30512
+      },
+      {
+        "name": "Daniel Berger",
+        "odds": 30988
+      },
+      {
+        "name": "Ryo Hisatsune",
+        "odds": 33049
+      },
+      {
+        "name": "Max Greyserman",
+        "odds": 33233
+      },
+      {
+        "name": "Lucas Herbert",
+        "odds": 33991
+      },
+      {
+        "name": "Tom Kim",
+        "odds": 34988
+      },
+      {
+        "name": "Sudarshan Yellamaraju",
+        "odds": 34988
+      },
+      {
+        "name": "Corey Conners",
+        "odds": 35614
+      },
+      {
+        "name": "Davis Thompson",
+        "odds": 35828
+      },
+      {
+        "name": "Nick Taylor",
+        "odds": 36045
+      },
+      {
+        "name": "Sam Stevens",
+        "odds": 36045
+      },
+      {
+        "name": "Sungjae Im",
+        "odds": 36045
+      },
+      {
+        "name": "Jayden Schaper",
+        "odds": 36485
+      },
+      {
+        "name": "Pierceson Coody",
+        "odds": 36710
+      },
+      {
+        "name": "Michael Brennan",
+        "odds": 38362
+      },
+      {
+        "name": "Matt McCarty",
+        "odds": 43696
+      },
+      {
+        "name": "Michael Kim",
+        "odds": 43696
+      },
+      {
+        "name": "Andrew Putnam",
+        "odds": 46412
+      },
+      {
+        "name": "Cameron Smith",
+        "odds": 46775
+      },
+      {
+        "name": "Jackson Suber",
+        "odds": 51182
+      },
+      {
+        "name": "Max McGreevy",
+        "odds": 52532
+      },
+      {
+        "name": "Matti Schmid",
+        "odds": 58152
+      },
+      {
+        "name": "Johnny Keefer",
+        "odds": 58724
+      },
+      {
+        "name": "William Mouw",
+        "odds": 59900
+      },
+      {
+        "name": "Ben James",
+        "odds": 65834
+      },
+      {
+        "name": "Emiliano Grillo",
+        "odds": 78847
+      },
+      {
+        "name": "Nathan Kimsey",
+        "odds": 89452
+      },
+      {
+        "name": "Carlos Ortiz",
+        "odds": 90809
+      },
+      {
+        "name": "Preston Stout",
+        "odds": 95138
+      },
+      {
+        "name": "Ben Kohles",
+        "odds": 95138
+      },
+      {
+        "name": "Patrick Rodgers",
+        "odds": 98261
+      },
+      {
+        "name": "Chris Kirk",
+        "odds": 99900
+      },
+      {
+        "name": "Adrien Dumont De Chassart",
+        "odds": 101595
+      },
+      {
+        "name": "Cooper Dossey",
+        "odds": 122349
+      },
+      {
+        "name": "Hennie Du Plessis",
+        "odds": 127560
+      },
+      {
+        "name": "John Parry",
+        "odds": 146241
+      },
+      {
+        "name": "Neal Shipley",
+        "odds": 149900
+      },
+      {
+        "name": "Nico Echavarria",
+        "odds": 153746
+      },
+      {
+        "name": "Billy Horschel",
+        "odds": 162062
+      },
+      {
+        "name": "Adrien Saddier",
+        "odds": 171329
+      },
+      {
+        "name": "Ugo Coussaud",
+        "odds": 181718
+      },
+      {
+        "name": "Jimmy Stanger",
+        "odds": 193448
       }
     ]
   },
   "settings": {
     "buyIn": 7,
-    "par": 72,
-    "year": 2026
+    "par": 70,
+    "year": 2026,
+    "tournamentName": "U.S. Open",
+    "course": "Shinnecock Hills Golf Club",
+    "locked": false,
+    "submissionDeadline": "2026-06-18T10:35:00Z"
   },
   "penaltyScores": {
     "round3": null,

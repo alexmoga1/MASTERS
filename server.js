@@ -5,10 +5,10 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'masters2026';
-const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'masters123';
-// April 9, 2026 8:00am ET = 12:00pm UTC
-const SUBMISSION_DEADLINE = new Date('2026-04-09T12:00:00Z');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'open2026';
+const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'open123';
+// U.S. Open 2026 first tee — June 18, 2026 6:35am ET = 10:35am UTC
+const SUBMISSION_DEADLINE = new Date('2026-06-18T10:35:00Z');
 
 // Cache live scores for 60 seconds
 let scoreCache = { data: null, timestamp: 0 };
@@ -61,36 +61,17 @@ async function fetchLiveScores() {
     return scoreCache.data;
   }
 
-  const { par, year } = loadData().settings;
+  const { tournamentName } = loadData().settings;
 
-  // Primary: Masters.com official live feed
+  // ESPN golf leaderboard — the live source for the U.S. Open.
   try {
     const res = await fetch(
-      `https://www.masters.com/en_US/scores/feeds/${year}/scores.json`,
+      'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard',
       { headers: { 'User-Agent': 'Mozilla/5.0' }, timeout: 10000 }
     );
     if (res.ok) {
       const json = await res.json();
-      const players = parseMastersData(json, par);
-      if (players.length > 0) {
-        scoreCache = { data: players, timestamp: now };
-        console.log(`[scores] Masters.com: ${players.length} players`);
-        return players;
-      }
-    }
-  } catch (e) {
-    console.warn('[scores] Masters.com failed:', e.message);
-  }
-
-  // Fallback: ESPN golf leaderboard
-  try {
-    const res = await fetch(
-      'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard',
-      { timeout: 10000 }
-    );
-    if (res.ok) {
-      const json = await res.json();
-      const players = parseESPNData(json, par);
+      const players = parseESPNData(json, tournamentName);
       if (players.length > 0) {
         scoreCache = { data: players, timestamp: now };
         console.log(`[scores] ESPN: ${players.length} players`);
@@ -110,93 +91,45 @@ async function fetchLiveScores() {
   return [];
 }
 
-function parseMastersData(json, par) {
+function parseESPNData(json, tournamentName) {
   const players = [];
-  const list = json?.data?.player || [];
+  let events = json?.events || [];
 
-  // Augusta National hole pars (holes 1–18)
-  const holePars = [4,5,4,3,4,3,4,5,4, 4,4,3,5,4,5,3,4,4];
-
-  for (const p of list) {
-    const name = `${p.first_name} ${p.last_name}`.trim();
-    const status = (p.status || '').toUpperCase();
-    // Masters status codes: 'C' = cut, 'W' = withdrawn, 'D' = disqualified
-    const missed_cut = ['C','W','D','CUT','WD'].includes(status);
-
-    // rounds 1–4 are objects: { total: <raw strokes or null>, scores: [18 hole scores] }
-    function getRoundData(roundObj) {
-      if (!roundObj) return { toPar: null, holes: [] };
-      const total = roundObj.total != null ? parseInt(roundObj.total, 10) : null;
-      const toPar = total !== null ? total - par : null;
-      const holes = (roundObj.scores || []).map((s, hi) => {
-        if (s === null) return null;
-        const strokes = parseInt(s, 10);
-        return { hole: hi + 1, strokes, toPar: strokes - holePars[hi] };
-      });
-      return { toPar, holes, status: roundObj.roundStatus || '' };
-    }
-
-    const rd = [
-      getRoundData(p.round1),
-      getRoundData(p.round2),
-      getRoundData(p.round3),
-      getRoundData(p.round4)
-    ];
-
-    const rounds = rd.map(r => r.toPar);
-    const completedRounds = rounds.filter(r => r !== null).length;
-
-    const thru = p.thru || '-';
-    const today = parseScore(p.today);
-
-    // If a round is in progress (today score exists, round total not yet posted)
-    const inProgress = today !== null && thru !== '' && thru !== 'F';
-    if (inProgress && completedRounds < 4) {
-      rounds[completedRounds] = today;
-    }
-
-    // Total to-par: prefer explicit `topar` field, fall back to summing rounds
-    const totalStr = p.topar || p.total || null;
-    let total = parseScore(totalStr);
-    if (total === null && rounds.some(r => r !== null)) {
-      total = rounds.filter(r => r !== null).reduce((s, v) => s + v, 0);
-    }
-
-    players.push({
-      name,
-      nameNorm: normalizeName(name),
-      position: p.pos || '-',
-      missed_cut,
-      rounds,
-      holeByHole: rd.map(r => r.holes),
-      total,
-      today,
-      thru,
-      status: p.status || '',
-      completedRounds
-    });
+  // If a tournament is configured, only read events that match it — so a
+  // concurrent tour event (or a stale/next event) can never poison the pool.
+  if (tournamentName) {
+    const want = tournamentName.toLowerCase();
+    const matched = events.filter(e =>
+      (e.name || '').toLowerCase().includes(want) ||
+      (e.shortName || '').toLowerCase().includes(want)
+    );
+    if (matched.length) events = matched;
   }
-
-  return players;
-}
-
-function parseESPNData(json, par) {
-  const players = [];
-  const events = json?.events || [];
 
   for (const event of events) {
     for (const comp of (event.competitions || [])) {
       for (const c of (comp.competitors || [])) {
         const name = c.athlete?.displayName || '';
-        const statusName = c.status?.type?.name || '';
-        const missed_cut = statusName === 'STATUS_MISSED_CUT' || statusName === 'STATUS_WITHDRAWN';
+        if (!name) continue;
 
+        // Cut detection is robust to ESPN's various status spellings.
+        const typeName = (c.status?.type?.name || '').toUpperCase();
+        const detail = (c.status?.type?.description || c.status?.displayValue || '').toUpperCase();
+        const missed_cut =
+          /CUT|WITHDRAW|DISQUALIF/.test(typeName) ||
+          /\b(CUT|WD|MC|DQ)\b/.test(detail);
+
+        // Per-round linescores: displayValue is already to-par ("-4", "E", "+2")
         const linescores = c.linescores || [];
         const rounds = linescores.slice(0, 4).map(ls => parseScore(ls.displayValue));
         while (rounds.length < 4) rounds.push(null);
 
-        const thru = c.status?.displayValue || '-';
-        const total = parseScore(c.score);
+        const state = c.status?.type?.state; // 'pre' | 'in' | 'post'
+        const thru = state === 'pre' ? '-' : (c.status?.displayValue || '-');
+
+        // `score` may be a plain string ("-5") or an object ({ value, displayValue })
+        const rawScore = (c.score && typeof c.score === 'object') ? c.score.displayValue : c.score;
+        const total = parseScore(rawScore);
         const completedRounds = rounds.filter(r => r !== null).length;
 
         players.push({
@@ -261,15 +194,22 @@ function calculateLeaderboard(participants, liveScores, manualPenalty) {
       };
     });
 
-    // Apply missed-cut penalty to rounds 3 & 4
+    // Apply missed-cut penalty to rounds 3 & 4.
+    // A cut golfer doesn't play the weekend, so their R3/R4 score is REPLACED by
+    // the penalty (overriding any stray/placeholder value from the feed) so the
+    // missing rounds count against the team. The drop-worst rule still applies.
     const effectiveRounds = golfers.map(g => {
       const r = [...g.rounds];
       if (g.missed_cut) {
-        if (r[2] === null && penalties.round3 !== null) r[2] = penalties.round3;
-        if (r[3] === null && penalties.round4 !== null) r[3] = penalties.round4;
+        if (penalties.round3 !== null) r[2] = penalties.round3;
+        if (penalties.round4 !== null) r[3] = penalties.round4;
       }
       return r;
     });
+
+    // Surface the penalty-adjusted rounds to the UI so a cut golfer's R3/R4
+    // actually display the "CUT PEN" score instead of looking blank.
+    golfers.forEach((g, gi) => { g.rounds = effectiveRounds[gi]; });
 
     // Per-round team score: sum of all golfer scores - worst (drop 1 per round)
     const roundScores = [];
@@ -532,6 +472,10 @@ app.post('/api/refresh', async (req, res) => {
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 
-app.listen(PORT, () => {
-  console.log(`Masters Pool running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`U.S. Open Pool running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = { calculateLeaderboard, parseESPNData, autoPenalty, findGolfer, normalizeName };

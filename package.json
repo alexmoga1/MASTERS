@@ -1,7 +1,7 @@
 {
   "name": "masters-pool",
   "version": "1.0.0",
-  "description": "2026 Masters Tournament Golf Pool Tracker",
+  "description": "2026 U.S. Open Golf Pool Tracker",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,5 +13,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "xlsx": "^0.18.5"
   }
 }
