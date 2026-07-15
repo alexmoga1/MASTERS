@@ -4,200 +4,236 @@ let accessCode = '';
 let tiers = null;
 let buyInAmount = 10;
 
-// U.S. Open 2026 first tee — June 18, 2026 6:35am ET = 10:35am UTC
-const SUBMISSION_DEADLINE = new Date('2026-06-18T10:35:00Z');
+// The Open 2026 first tee — July 16, 2026 6:35am BST = 5:35am UTC
+const SUBMISSION_DEADLINE = new Date('2026-07-16T05:35:00Z');
 
 // ── Golfer hype bank ──────────────────────────────────────────────────────────
+// Themed for The Open Championship at Royal Birkdale (Southport, England).
+// Keys must match the tier names exactly (as sent by /api/tiers).
 
 const GOLFER_HYPE = {
   // ── Tier 1 ──────────────────────────────────────────────────────────────────
   'Scottie Scheffler': [
-    { icon: '🟢', title: 'Boring pick. GENIUS pick.', msg: 'World No. 1 said "lemme just win Augusta again" and honestly? he might just do it. locked tf in.' },
-    { icon: '🏆', title: 'Safe but make it dominant', msg: 'Scheffler won this thing in 2022 AND 2024. bro is just built for Augusta no cap.' },
-    { icon: '🫡', title: 'Respectful af pick', msg: 'You looked at the best golfer on the planet and said yes please. we respect that energy.' }
-  ],
-  'Jon Rahm': [
-    { icon: '🔥', title: 'FIREEEE!! I love the Rahm pick.', msg: 'El Rahmbo plays Augusta like it owes him money. two-time major winner who is absolutely built for this moment.' },
-    { icon: '😤', title: 'The Spaniard is cooked in 🔥', msg: 'Rahm shows up at majors and goes absolutely feral. this is not a pick, this is a STATEMENT.' },
-    { icon: '💥', title: 'Bold? No. CORRECT.', msg: 'He won the Masters in 2023 and hasn\'t forgotten what it feels like. Rahm is going to cook this week.' }
-  ],
-  'Bryson DeChambeau': [
-    { icon: '🧪', title: 'You picked the mad scientist and we\'re here for it', msg: 'Bryson pulled out a spreadsheet, did the math, and decided Augusta is solvable. he might actually be right.' },
-    { icon: '💪', title: 'Big brain, bigger drives', msg: 'This man scientifically optimized his body and his golf swing. If that\'s not the energy you want in your pool, idk what to tell you.' },
-    { icon: '🔬', title: 'Main character behavior fr', msg: 'Nobody plays golf like Bryson. Nobody. absolute freak of nature pick and we mean that as a compliment.' }
+    { icon: '🟢', title: 'Boring pick. GENIUS pick.', msg: 'World No. 1 at a links course is just unfair. Scottie doesn\'t care about wind, rain, or pot bunkers — he just posts numbers. locked tf in.' },
+    { icon: '🏆', title: 'The safe pick that actually wins', msg: 'Everyone else is guessing. You picked the best golfer on the planet to lift the Claret Jug. that\'s not a gamble, that\'s a plan.' },
+    { icon: '🫡', title: 'Respectful af pick', msg: 'You looked at the No. 1 player in the world and said yes please. Champion Golfer of the Year energy. we respect it.' }
   ],
   'Rory McIlroy': [
-    { icon: '🍀', title: 'FIREEEE!! I love the Rory pick.', msg: 'Career Grand Slam is RIGHT THERE. Rory wants this more than anyone alive and Augusta is finally going to give it to him. this is the year.' },
-    { icon: '😭', title: 'He needs this SO bad and it\'s going to slap', msg: 'Rory has been chasing the green jacket his whole career. one of these years he gets it. could literally be this week. pick goes crazy.' },
-    { icon: '🏆', title: 'THE. YEAR. OF. RORY.', msg: 'bro has been so close so many times. the universe owes him this one. great pick, great energy, great vibes only.' }
+    { icon: '🍀', title: 'FIREEEE!! I love the Rory pick.', msg: 'He\'s already got a Claret Jug (2014) and Birkdale links golf is in his blood. When Rory gets it going in the wind it is genuinely must-watch. this is the year.' },
+    { icon: '😤', title: 'Rory in the UK hits different', msg: 'Home soil, roaring crowds, links bounce. Rory feeds off this energy like nobody else. pick goes absolutely crazy.' },
+    { icon: '🏆', title: 'THE. YEAR. OF. RORY.', msg: 'Elite ball-striker who can flight it low and dance with the wind. If the weather turns nasty, that\'s exactly when Rory becomes lethal.' }
   ],
-  'Ludvig Aberg': [
-    { icon: '⚡', title: 'The Viking said "hold my meatballs"', msg: 'Finished runner-up at the Masters as a ROOKIE. He\'s only gotten better since. this pick is actually dangerous.' },
-    { icon: '👀', title: 'Slept on pick of the pool fr', msg: 'Everyone\'s picking Scheffler and Rory. You picked the 6\'4" Swedish destroyer who almost won this as a first-timer. respect.' },
-    { icon: '🇸🇪', title: 'ABERG IS BUILT DIFFERENT no cap', msg: 'Calm, powerful, insanely talented. Came out of nowhere and almost took the green jacket in his debut. he is NOT done.' }
+  'Jon Rahm': [
+    { icon: '🔥', title: 'FIREEEE!! I love the Rahm pick.', msg: 'El Rahmbo plays links golf like a modern-day Seve — creative, fiery, fearless. two-time major winner built for a windy week at Birkdale.' },
+    { icon: '😤', title: 'The Spaniard is cooked in 🔥', msg: 'Rahm shows up at majors and goes feral. Give him gnarly weather and a hard links test and he gets even MORE dangerous. STATEMENT pick.' },
+    { icon: '💥', title: 'Bold? No. CORRECT.', msg: 'Rahm has the short game and the grit to grind out a links championship. this pick is going to look very, very smart on Sunday.' }
   ],
-  'Xander Schauffele': [
-    { icon: '🏆', title: 'Reigning major champ said what\'s up', msg: 'Won the Open AND the PGA in back-to-back years. Xander doesn\'t do choking anymore — that era is OVER.' },
-    { icon: '🧊', title: 'Cold-blooded pick, we love it', msg: 'Xander Schauffele in a major is a different animal. the man simply shows up when it matters. elite pick energy.' },
-    { icon: '💅', title: 'Understated and absolutely correct', msg: 'He doesn\'t make noise, he just wins. Two majors, prime of his career, and Augusta suits his game perfectly. SLAY.' }
+  'Cameron Young': [
+    { icon: '🌟', title: 'CAMERON YOUNG IS ABOUT TO EAT 🍽️', msg: 'Runner-up at the 2022 Open on debut — this man was BORN for links golf. Elite bomber who flies under the radar. terrifying pick.' },
+    { icon: '🚀', title: 'Young dawg going off this week', msg: 'He nearly won the Claret Jug at St Andrews as a rookie. Cameron Young + a links course = a genuine sleeper to win the whole thing.' },
+    { icon: '🔥', title: 'Sneaky fire pick fr fr', msg: 'Huge off the tee, hungry for a first big title, and proven on links. this is the kind of pick that wins pools.' }
   ],
 
   // ── Tier 2 ──────────────────────────────────────────────────────────────────
-  'Cam Young': [
-    { icon: '🌟', title: 'CAM YOUNG IS ABOUT TO EAT 🍽️', msg: 'Sleeper pick energy but make it aggressive. Elite ball-striker flying under the radar. That\'s exactly when he\'s the most dangerous.' },
-    { icon: '🚀', title: 'Young dawg going off this week', msg: 'Nobody\'s scared of Cam Young and that\'s his whole thing. he will absolutely sneak up on this field and cook them.' },
-    { icon: '🔥', title: 'Sneaky fire pick fr fr', msg: 'Cam Young at Augusta with something to prove is genuinely terrifying for the competition. love this pick.' }
+  'Xander Schauffele': [
+    { icon: '🏆', title: 'The reigning Champion Golfer said what\'s up', msg: 'Won the Claret Jug at Royal Troon in 2024. He knows exactly how to win an Open now — and that experience is priceless. elite pick.' },
+    { icon: '🧊', title: 'Cold-blooded pick, we love it', msg: 'Xander in a major is a different animal. Zero panic, all execution. the man simply shows up when it matters most.' },
+    { icon: '💅', title: 'Understated and absolutely correct', msg: 'He doesn\'t make noise, he just wins majors. Defending Open pedigree and a game tailor-made for the wind. SLAY.' }
   ],
-  'Tommy Fleetwood': [
-    { icon: '💇', title: 'THE HAIR. THE IRONS. THE VIBES.', msg: 'Tommy Fleetwood is built for Augusta and you know it. beautiful ball-striking, incredible short game, elite main character energy.' },
-    { icon: '🎯', title: 'Fleetwood is about to go absolutely nuclear', msg: 'He has never won a major but he SHOULD have by now. This might finally be the week. certified fire pick.' },
-    { icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', title: 'The English assassin said hello', msg: 'Smooth as hell, dangerous as hell. Fleetwood plays Augusta like he was born on those fairways. great pick no cap.' }
+  'Bryson DeChambeau': [
+    { icon: '🧪', title: 'You picked the mad scientist and we\'re here for it', msg: 'Bryson vs links wind is the physics experiment of the century. He\'ll pull out a spreadsheet and try to solve Royal Birkdale. he might do it.' },
+    { icon: '💪', title: 'Big brain, bigger drives', msg: 'US Open champ with speed for days. If he figures out how to keep it under the wind, this Tier 2 pick becomes an absolute steal.' },
+    { icon: '🔬', title: 'Main character behavior fr', msg: 'Nobody plays golf like Bryson. Nobody. The crowds in England are going to LOVE the chaos. freak-of-nature pick, meant as a compliment.' }
+  ],
+  'Ludvig Aberg': [
+    { icon: '⚡', title: 'The Viking said "hold my meatballs"', msg: 'A Scandinavian who grew up in the wind and rain? Links golf is basically home. Aberg is a superstar in the making and this pick is dangerous.' },
+    { icon: '👀', title: 'Slept-on pick of the pool fr', msg: 'Everyone\'s piling on Scheffler and Rory. You grabbed the 6\'4" Swedish destroyer with an all-world swing. respect the vision.' },
+    { icon: '🇸🇪', title: 'ABERG IS BUILT DIFFERENT no cap', msg: 'Calm, powerful, ice in the veins. Exactly the temperament you need to survive a brutal links Sunday. he is NOT to be slept on.' }
   ],
   'Matt Fitzpatrick': [
-    { icon: '🧠', title: 'Big brain pick activated', msg: 'US Open champion who out-thinks the entire field. Fitz doesn\'t overpower Augusta — he outwits it. that\'s the move.' },
-    { icon: '🎯', title: 'Chess player in a field of checkers', msg: 'While everyone\'s bombing it 350, Fitz is plotting every shot from 100 yards out. certified strategic genius pick.' },
-    { icon: '📐', title: 'Calculated as hell and we respect it', msg: 'Matt Fitzpatrick does not make mistakes. At Augusta, where mistakes get punished mercilessly, that is an INSANE advantage.' }
+    { icon: '🧠', title: 'Big brain pick activated', msg: 'A proud Yorkshireman on home soil. Fitz doesn\'t overpower links courses — he out-thinks them. plots his way around like a chess master.' },
+    { icon: '🎯', title: 'Home hero energy', msg: 'US Open champion, English through and through, and the galleries will be roaring for him. Fitzpatrick at The Open is always a threat.' },
+    { icon: '📐', title: 'Calculated as hell and we respect it', msg: 'Precision golfer who avoids the pot bunkers everyone else finds. On a demanding links, that discipline is a massive edge.' }
   ],
-  'Hideki Matsuyama': [
-    { icon: '🌸', title: 'Hideki has a bond with Augusta that goes beyond golf', msg: 'He won the Masters in 2021 and literally cried on the green. Augusta is his house and he KNOWS it. fire pick.' },
-    { icon: '🎌', title: 'THE DEFENDING SPIRIT IS REAL', msg: 'Hideki walks around Augusta like he owns the place. because he kind of does? 2021 champion and he hasn\'t forgotten.' },
-    { icon: '⛳', title: 'Respect the Masters champion', msg: 'Won here before, loves it here, plays beautifully here. Hideki at Augusta is just a different thing and you tapped in. love it.' }
-  ],
-  'Collin Morikawa': [
-    { icon: '📐', title: 'The most precise man alive just entered the chat', msg: 'Morikawa hits fairways like it\'s a personal obsession. At Augusta, where accuracy wins, he is literally built for this.' },
-    { icon: '🤖', title: 'Machine mode: ON', msg: 'Two major wins. No drama. Just pure, robotic ball-striking excellence. Morikawa doesn\'t get rattled — he just wins.' },
-    { icon: '🔥', title: 'Clinical pick and we mean that as a compliment', msg: 'When Morikawa is clicking nobody can touch him. Like, genuinely nobody. elite pick fr.' }
-  ],
-  'Robert MacIntyre': [
-    { icon: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', title: 'BRO PICKED A LEFTY SCOTSMAN AND WE ARE FULLY ROOTING FOR HIM', msg: 'Underdog arc incoming. Big heart, massive game, and absolutely nothing to lose. MacIntyre might be the story of the week.' },
-    { icon: '🏹', title: 'The Scottish longbow has been loaded', msg: 'Left-hander with elite iron play and zero fear. He plays with a chip on his shoulder the size of a green jacket. fire pick.' },
-    { icon: '⚡', title: 'Chaos pick? Inspired pick? Both.', msg: 'MacIntyre is trending in the right direction at exactly the right time. If he goes on a run this week, you\'re going to look like a genius.' }
+  'Tommy Fleetwood': [
+    { icon: '🏠', title: 'SOUTHPORT\'S OWN. THIS IS HIS BACKYARD.', msg: 'Tommy Fleetwood is FROM Southport — Royal Birkdale is basically his home course. The crowd will be absolutely deafening for him. goosebumps pick.' },
+    { icon: '💇', title: 'THE HAIR. THE IRONS. THE HOMETOWN.', msg: 'Beautiful ball-striker, elite links game, and 40,000 locals screaming his name. If Tommy wins the Claret Jug HERE the country loses its mind.' },
+    { icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', title: 'Destiny pick, no notes', msg: 'The English fan-favorite who\'s been knocking on the door of a major forever. A home Open at Birkdale might just be the fairytale. UNREAL pick.' }
   ],
 
   // ── Tier 3 ──────────────────────────────────────────────────────────────────
-  'Min Woo Lee': [
-    { icon: '🎪', title: 'MIN WOO LEE IS GOING TO DO SOMETHING INSANE THIS WEEK', msg: 'And you\'re going to be right there for it. He plays golf like he\'s performing for a crowd. absolute vibe pick, no notes.' },
-    { icon: '🎨', title: 'Most entertaining pick in the entire pool', msg: 'Min Woo doesn\'t just make birdies, he makes MOMENTS. This week is going to be a movie and you picked the main character.' },
-    { icon: '🔥', title: 'Fearless pick, fearless golfer', msg: 'He plays like he has nothing to lose, which is the most dangerous thing in golf. incredible pick fr fr.' }
+  'Brooks Koepka': [
+    { icon: '😤', title: 'KOEPKA IN A MAJOR IS LITERALLY CHEATING', msg: 'Five majors. FIVE. The man treats major weeks like his personal hunting ground. you picked a serial killer of golf tournaments.' },
+    { icon: '🔪', title: 'Stone cold killer energy', msg: 'Brooks doesn\'t care about vibes, he cares about trophies. Big, strong, and mentally bulletproof — exactly what a links grind demands.' },
+    { icon: '💀', title: 'Major mode activated, everybody run', msg: 'Something switches on in Koepka when a major starts. Scientists can\'t explain it. You don\'t need to. just enjoy it.' }
+  ],
+  'Collin Morikawa': [
+    { icon: '🏆', title: 'CLARET JUG WINNER ON DEBUT, HELLO??', msg: 'Morikawa won The Open the very first time he played it (2021). The man just gets links golf immediately. ridiculous pick value here.' },
+    { icon: '🤖', title: 'The most precise iron player alive', msg: 'Flag-hunting machine who controls his ball flight better than anyone. On a windy links, that control is worth its weight in gold.' },
+    { icon: '🔥', title: 'Clinical pick and we mean that as a compliment', msg: 'Two majors, zero fear, and a proven Open champion. When Morikawa\'s irons are dialed, nobody in the field can hang.' }
   ],
   'Justin Rose': [
-    { icon: '🌹', title: 'The Rose is blooming again', msg: 'Augusta veteran who knows every inch of that course. been sleeping on him? he\'s about to wake the entire field up.' },
-    { icon: '🏆', title: 'Classic pick, classic player', msg: 'US Open champion. Augusta National legend. Justin Rose at the Masters is never not a threat and you know that.' },
-    { icon: '😌', title: 'Quiet confidence pick', msg: 'Rose doesn\'t hype himself up. He just shows up and goes low. Underrated and dangerous — exactly the vibe.' }
+    { icon: '🌹', title: 'THE BIRKDALE LEGEND RETURNS', msg: 'Justin Rose announced himself to the world at Royal Birkdale in 1998 — holing out on 18 as a 17-year-old amateur to finish T4. This place is sacred to him. chills.' },
+    { icon: '🏆', title: 'Full-circle story pick', msg: 'US Open champion, Olympic gold medalist, and a man with genuine history at this exact course. Rose at Birkdale is pure romance and real danger.' },
+    { icon: '😌', title: 'Quiet confidence pick', msg: 'Ageless ball-striker who still shows up at majors. Coming back to where it all began? don\'t be shocked if he goes low.' }
   ],
-  'Brooks Koepka': [
-    { icon: '😤', title: 'KOEPKA IN A MAJOR IS LITERALLY CHEATING', msg: 'Five major titles. FIVE. The man shows up when the trophy is on the line every single time. you picked a serial winner.' },
-    { icon: '🔪', title: 'Stone cold killer energy, we love to see it', msg: 'Brooks doesn\'t have a personality but he has 5 majors so who is actually laughing. goated pick no cap.' },
-    { icon: '💀', title: 'Major mode activated, everybody run', msg: 'Something clicks in Brooks Koepka when a major starts. Scientists can\'t explain it. You don\'t need to. Just enjoy the wins.' }
+  'Russell Henley': [
+    { icon: '🎯', title: 'The quiet assassin nobody talks about', msg: 'Henley just keeps posting top finishes while everyone ignores him. Precise, patient, perfect temperament for a links slog. sleeper found.' },
+    { icon: '📊', title: 'Insane value pick if you look at the data', msg: 'Consistent as they come and flies completely under the radar. That\'s exactly the type that hangs around a leaderboard all week.' },
+    { icon: '🕵️', title: 'You did your research and it shows', msg: 'Most people skip right past Henley. You didn\'t. that\'s what separates pool winners from the Scheffler-and-done crowd.' }
   ],
-  'Chris Gotterup': [
-    { icon: '🎯', title: 'NICE, Gotterup is going to cook the shit out of everyone.', msg: 'Nobody\'s talking about him. That\'s exactly what he wants. Sleeper pick of the tournament and you found him first.' },
-    { icon: '🚀', title: 'This pick is going to age like fine wine', msg: 'Gotterup is a big hitter with a big game and zero expectations. That is the perfect recipe for a Masters run.' },
-    { icon: '👀', title: 'You saw something nobody else did', msg: 'Everyone\'s ignoring Gotterup. You aren\'t. When he goes deep this week you\'re going to look like an absolute prophet.' }
+  'Justin Thomas': [
+    { icon: '💥', title: 'JT IS COMING FOR BLOOD THIS WEEK', msg: 'Two-time major champ with a chip on his shoulder. When Justin Thomas gets hot he is genuinely unstoppable. this pick has real upside.' },
+    { icon: '🔥', title: 'Motivated JT is a terrifying thing', msg: 'He\'s been grinding his way back to the top and a Claret Jug would complete the picture. don\'t sleep on his links ceiling.' },
+    { icon: '😤', title: 'The comeback narrative is so good', msg: 'If it clicks for JT at Birkdale, you\'re going to be LOUD about this pick. and rightfully so.' }
   ],
-  'Jordan Spieth': [
-    { icon: '💚', title: 'SPIETH AND AUGUSTA IS A LOVE STORY AND YOU\'RE PART OF IT NOW', msg: '2015 Masters champion who has never really left. He and Augusta have a thing that just doesn\'t quit. legendary pick.' },
-    { icon: '🎩', title: 'Augusta\'s forever darling said I\'m back', msg: 'Spieth loves this place more than any golfer alive. When he\'s on at Augusta, it\'s genuinely special to watch.' },
-    { icon: '🔥', title: 'Romantic pick and we mean that respectfully', msg: 'Picking Spieth at Augusta is picking a guy who would literally bleed for that green jacket. the passion is unmatched.' }
+  'Patrick Cantlay': [
+    { icon: '🧊', title: 'THE ICEMAN. This is not a game.', msg: 'Cantlay putts like he\'s got liquid nitrogen in his veins. The patience he brings is exactly what a links championship rewards.' },
+    { icon: '😶', title: 'Zero emotion, all results', msg: 'Doesn\'t celebrate, doesn\'t flinch, just makes birdie after birdie. robotically excellent — perfect for a grind-it-out week.' },
+    { icon: '🎯', title: 'Under the radar, about to blow up the board', msg: 'Nobody\'s talking about Cantlay this week. he prefers it that way. your pick does the talking for you.' }
   ],
-  'Patrick Reed': [
-    { icon: '😈', title: 'Controversial pick but we RESPECT the chaos energy', msg: '2018 Masters champion. Polarizing? Sure. Dangerous at Augusta? Absolutely. Captain America shows up in majors.' },
-    { icon: '🫡', title: 'Villain arc pick and we are HERE', msg: 'Patrick Reed does not care what you think about him. He just wins majors. Two of them. Including this one. bold pick.' },
-    { icon: '🎭', title: 'This pick has main character energy for the wrong reasons but who cares', msg: 'Love him or hate him, Reed at Augusta is always a story. and your pick might just be the story of the week.' }
+  'Viktor Hovland': [
+    { icon: '🇳🇴', title: 'HOVLAND IS BACK BABY', msg: 'A Norwegian who grew up hitting balls indoors through brutal winters — cold and wind don\'t scare this man one bit. great links pick.' },
+    { icon: '⚡', title: 'Scandinavian destroyer mode: ENGAGED', msg: 'When Hovland\'s game is on, he\'s a top-5 player on the planet with the biggest smile in golf. dangerous and delightful.' },
+    { icon: '🔥', title: 'The comeback arc hits different', msg: 'People doubted him during a rough patch. You didn\'t. if he catches fire at Birkdale that pick feels incredible.' }
   ],
 
   // ── Tier 4 ──────────────────────────────────────────────────────────────────
-  'Viktor Hovland': [
-    { icon: '🇳🇴', title: 'HOVLAND IS BACK BABY', msg: 'Former world No. 1 playing with pure joy and freedom right now. When Hovland is cooking, he\'s a top-5 player on the planet. great pick.' },
-    { icon: '⚡', title: 'Norwegian destroyer mode: ENGAGED', msg: 'He went through a rough patch and came out the other side swinging harder. Hovland with something to prove is absolutely lethal.' },
-    { icon: '🔥', title: 'The comeback arc pick hits different', msg: 'Everyone doubted Hovland for a minute. You didn\'t. If he goes on a run this week that pick is going to feel incredible.' }
-  ],
-  'Russell Henley': [
-    { icon: '🎯', title: 'The quiet assassin nobody talks about', msg: 'Henley quietly goes top-10 at Augusta every year and nobody mentions it. Until now. Certified sleeper pick and you found him.' },
-    { icon: '📊', title: 'Actually insane value pick if you look at the data', msg: 'Consistent. Precise. Flies completely under the radar. Henley at Augusta is historically underrated and you just cashed in.' },
-    { icon: '🕵️', title: 'You did your research and it shows', msg: 'Most people skip past Henley. You didn\'t. That\'s what separates the winners from the people who pick Scheffler and call it a day.' }
-  ],
   'Si Woo Kim': [
-    { icon: '✨', title: 'SI WOO KIM DOES NOT MISS IN A BIG MOMENT', msg: 'Won the Players Championship, has pulled off shots nobody else would attempt. Wild card energy but make it elite.' },
-    { icon: '🎲', title: 'Chaotic good pick, we love the energy', msg: 'Si Woo plays with a freedom that is genuinely dangerous. Nobody knows what he\'s capable of — and that includes the field.' },
-    { icon: '🎪', title: 'Unpredictable pick for an unpredictable player', msg: 'Si Woo Kim will do something this week that makes you scream at your phone. Whether that\'s good or bad is TBD but it will be a ride.' }
+    { icon: '✨', title: 'SI WOO DOES NOT MISS IN A BIG MOMENT', msg: 'Players Championship winner with the guts to pull off shots nobody else would try. wild-card energy but make it elite.' },
+    { icon: '🎲', title: 'Chaotic good pick, we love it', msg: 'Si Woo plays with a freedom that\'s genuinely dangerous on a links, where creativity wins. nobody knows what he\'s capable of.' },
+    { icon: '🎪', title: 'Unpredictable player, thrilling pick', msg: 'He\'ll do something this week that makes you scream at your phone. buckle up — it\'s going to be a ride.' }
   ],
-  'Justin Thomas': [
-    { icon: '💥', title: 'JT IS COMING FOR BLOOD THIS WEEK', msg: 'Two major wins and a massive chip on his shoulder. He\'s been building and building and Augusta is where he finally explodes.' },
-    { icon: '🔥', title: 'Motivated JT is a terrifying thing', msg: 'Justin Thomas with something to prove is one of the scariest golfers on tour. He\'s got that look in his eye this week.' },
-    { icon: '😤', title: 'The comeback narrative pick is so good', msg: 'JT has been grinding to get back to his best. If it clicks at Augusta this week, you are going to be LOUD about this pick.' }
+  'Chris Gotterup': [
+    { icon: '🎯', title: 'NICE — Gotterup is about to cook the whole field.', msg: 'This man just WINS on links-style setups when nobody\'s watching. Sleeper of the tournament and you found him first. genius.' },
+    { icon: '🚀', title: 'This pick ages like fine wine', msg: 'Big hitter, red-hot form, zero expectations. that\'s the perfect recipe for a surprise Open run.' },
+    { icon: '👀', title: 'You saw something nobody else did', msg: 'Everyone\'s ignoring Gotterup. When he goes deep this week you look like an absolute prophet.' }
   ],
-  'Akshay Bhatia': [
-    { icon: '🌊', title: 'You picked the young dawg who gives zero f**ks and that\'s a strategy', msg: 'Fearless, talented, and trending upward at the exact right time. This might be the year Augusta introduces itself to Akshay Bhatia.' },
-    { icon: '🆕', title: 'New wave energy pick hits different', msg: 'Bhatia plays with the confidence of someone who hasn\'t learned what\'s supposed to be hard yet. Dangerous as hell at a major.' },
-    { icon: '🚀', title: 'The future is now pick', msg: 'Young, unafraid, and improving every week. If Bhatia has a breakout moment this year, it\'s going to be at Augusta. you called it.' }
+  'Tyrrell Hatton': [
+    { icon: '😡', title: 'THE ANGRIEST MAN IN GOLF (WE LOVE HIM)', msg: 'Englishman who plays links golf with pure fire — and might snap a club in half doing it. elite ball-striker, elite entertainment. great pick.' },
+    { icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', title: 'Home crowd, home game', msg: 'Hatton grew up on courses just like this. Give him wind and firm turf and he thrives. the galleries will be right behind him.' },
+    { icon: '🎯', title: 'Rage-fueled precision pick', msg: 'All the mutter and the muttering aside, Hatton is a seriously good major player. this pick has real bite.' }
   ],
-  'Patrick Cantlay': [
-    { icon: '🧊', title: 'THE ICEMAN. This is not a game.', msg: 'Patrick Cantlay putts like he\'s got liquid nitrogen in his veins. Sneaky elite pick that\'s going to pay off big.' },
-    { icon: '😶', title: 'Zero emotion, all results pick', msg: 'Cantlay doesn\'t celebrate, doesn\'t react, just makes birdie after birdie after birdie. robotically excellent pick.' },
-    { icon: '🎯', title: 'Under the radar and about to blow up the leaderboard', msg: 'Nobody\'s talking about Cantlay this week. He prefers it that way. Your pick is going to do the talking for you.' }
+  'Nicolai Hojgaard': [
+    { icon: '🇩🇰', title: 'THE DANE IS COMING AND NOBODY IS READY', msg: 'A big-hitting Scandinavian raised in the wind. Højgaard is one of the most underrated players in the world and you just found him.' },
+    { icon: '🔥', title: 'Højgaard said "let me cook"', msg: 'Huge game, huge upside, zero pressure this week. that combination at a links Open is genuinely dangerous. great find.' },
+    { icon: '🌊', title: 'Sleeper alert of the tournament', msg: 'Outside the golf-nerd circle nobody knows him yet. By Sunday they might. and you called it first.' }
+  ],
+  'Min Woo Lee': [
+    { icon: '🎪', title: 'MIN WOO IS ABOUT TO DO SOMETHING INSANE', msg: 'And you\'ll be right there for it. He plays golf like he\'s performing for a sold-out crowd. absolute vibe pick, no notes.' },
+    { icon: '🎨', title: 'Most entertaining pick in the pool', msg: 'Min Woo doesn\'t just make birdies, he makes MOMENTS. This week is going to be a movie and you picked a lead role.' },
+    { icon: '🔥', title: 'Fearless pick, fearless golfer', msg: 'He plays like he has nothing to lose — the most dangerous thing in golf. incredible pick fr fr.' }
+  ],
+  'Jordan Spieth': [
+    { icon: '💚', title: 'THE 2017 BIRKDALE CHAMPION IS BACK AT BIRKDALE', msg: 'Spieth won The Open right here in 2017 — including THAT unreal bogey save off the driving range on 13. this course owes him nothing and he owes it everything. LEGENDARY pick.' },
+    { icon: '🎩', title: 'History is repeating itself pick', msg: 'A former Champion Golfer returning to the exact links where he lifted the Jug. Spieth\'s short-game wizardry is tailor-made for Birkdale.' },
+    { icon: '🔥', title: 'Romantic pick and we mean it respectfully', msg: 'When Spieth gets the magic going on a links, it\'s genuinely special TV. picking him here is picking pure history.' }
+  ],
+  'Robert MacIntyre': [
+    { icon: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', title: 'A LEFTY SCOTSMAN ON LINKS?? SAY LESS.', msg: 'MacIntyre was raised on Scottish links in the wind and rain. This is his natural habitat. huge heart, huge game, home-nation roars. we\'re rooting hard.' },
+    { icon: '🏹', title: 'The Scottish longbow is loaded', msg: 'Left-hander with elite creativity and zero fear of bad weather. Bob MacIntyre in the UK is a genuine dark horse to win it all.' },
+    { icon: '⚡', title: 'Inspired pick, trending at the right time', msg: 'He\'s been climbing fast and links golf suits him perfectly. if he catches a run this week you look like a genius.' }
   ],
 
   // ── Tier 5 ──────────────────────────────────────────────────────────────────
-  'Sam Burns': [
-    { icon: '🔥', title: 'Dark horse pick fr fr', msg: 'Burns has the game for Augusta, just needs one week to go his way. This might genuinely be that week. fire pick.' },
-    { icon: '🎯', title: 'Louisiana heat incoming', msg: 'Sam Burns hits it a mile, putts his ass off, and plays with quiet intensity. Tier 5 value pick of the century honestly.' },
-    { icon: '👀', title: 'You saw the sleeper. Respect.', msg: 'Burns is the kind of player who could go quietly top-5 this week and nobody would see it coming. except you.' }
-  ],
-  'Maverick McNealy': [
-    { icon: '🛩️', title: 'MAVERICK MCNEALY IS BUILT DIFFERENT', msg: 'Stanford grad, hits it a mile, plays with actual swag. Nobody at Tier 5 is improving faster. Underdog pick of the year easily.' },
-    { icon: '📈', title: 'Most improved player you could have picked', msg: 'McNealy is on a trajectory that screams breakthrough moment incoming. You might be picking him at exactly the right time.' },
-    { icon: '🚀', title: 'High-flying longshot with real upside', msg: 'Nobody expects Maverick McNealy to make a run this week. That\'s exactly why this pick slaps so hard.' }
-  ],
-  'Corey Conners': [
-    { icon: '🍁', title: 'THE MOST ACCURATE DRIVER ON TOUR. AT AUGUSTA. HELLO??', msg: 'Where you get punished for missing fairways. And you picked the guy who never misses fairways. That\'s not a pick that\'s a SCHEME.' },
-    { icon: '🎯', title: 'The Canadian cannonball is locked in', msg: 'Conners doesn\'t make mistakes. Augusta punishes mistakes mercilessly. Do the math. You did. Great pick.' },
-    { icon: '🧠', title: 'Actually genius Tier 5 pick', msg: 'While others are picking vibes and feelings, you picked the most accurate ball-striker in the field. calculated as hell.' }
-  ],
-  'Tiger Woods': [
-    { icon: '🐅', title: 'YOU PICKED TIGER WOODS AT AUGUSTA AND WE WILL NOT HEAR A SINGLE WORD AGAINST IT.', msg: 'Five green jackets. Fifteen majors. A comeback story that has no right to keep working and yet. You picked right. You always pick right.' },
-    { icon: '👑', title: 'The GOAT pick. End of discussion.', msg: 'Tiger Woods at Augusta National is not a golf story, it\'s a mythology. And you just put yourself inside it. respect.' },
-    { icon: '🏆', title: 'This pick is either delusional or prophetic and there is no in between', msg: 'Tiger. Augusta. Green jacket. If it happens you will never let anyone forget you picked him. NOR SHOULD YOU.' }
-  ],
-  'Daniel Berger': [
-    { icon: '⚡', title: 'Berger said "everyone forgot about me" and is about to remind the field', msg: 'Villain arc behavior and we are fully rooting for it. Power game, great short game, massive motivation. dark horse pick.' },
-    { icon: '😤', title: 'Comeback szn pick goes hard', msg: 'Berger is playing with a chip on his shoulder the size of Augusta National. That energy is going to translate into birdies.' },
-    { icon: '🎯', title: 'The underdog with receipts', msg: 'People slept on Berger. You didn\'t. If he has a week, you\'re going to look like the smartest person in the pool. easily.' }
-  ],
-  'Nicolai Hojgaard': [
-    { icon: '🇩🇰', title: 'THE DANE IS COMING AND NOBODY IS READY', msg: 'Nicolai Hojgaard is one of the most underrated players in the world and you just found him. This pick is going to age beautifully.' },
-    { icon: '🔥', title: 'Hojgaard said "let me cook" and we believe him', msg: 'Big game, bigger potential, and zero pressure on him this week. That combination at Augusta is genuinely dangerous. great find.' },
-    { icon: '🌊', title: 'Sleeper alert of the entire tournament', msg: 'Nobody outside of golf nerds knows who Hojgaard is. By Sunday they will. And you called it first. respect.' }
-  ],
   'Shane Lowry': [
-    { icon: '🍀', title: 'THE CLARET JUG WINNER HAS ENTERED THE CHAT', msg: 'Shane Lowry is a major champion who plays with absolute heart and zero fucks given. When he\'s on, he is must-watch television.' },
-    { icon: '😤', title: 'Lowry is built for big moments and this is the biggest one', msg: 'He won the Open Championship in a storm and didn\'t blink. Augusta doesn\'t scare Shane Lowry. Nothing does. fire pick.' },
-    { icon: '🎯', title: 'The Irishman has unfinished business at Augusta', msg: 'Consistent, clutch, and criminally underrated at the Masters. Lowry is going to make some noise this week and you\'re riding it.' }
+    { icon: '🏆', title: 'THE CLARET JUG WINNER HAS ENTERED THE CHAT', msg: 'Lowry won The Open at Portrush in 2019 in an absolute STORM and didn\'t blink. Bad weather at Birkdale? he\'ll be licking his lips. Tier 5 STEAL.' },
+    { icon: '☘️', title: 'Big-moment, big-heart pick', msg: 'The Irishman plays links golf with pure soul and thrives when it\'s ugly out there. this is elite value for a Tier 5.' },
+    { icon: '🎯', title: 'Champion Golfer pedigree at Tier 5 price', msg: 'A proven Open winner sitting in the longshot tier? that\'s just good business. love this pick.' }
+  ],
+  'Cameron Smith': [
+    { icon: '🏆', title: 'ST ANDREWS CHAMPION, LINKS WIZARD', msg: 'Cam Smith won The Open in 2022 with the best short game on the planet. Links golf is his art form. absurd value at Tier 5.' },
+    { icon: '🎨', title: 'The mullet said "I do this"', msg: 'Nobody gets up-and-down like Smith and nobody reads links greens better. a former Champion Golfer at longshot odds is a gift.' },
+    { icon: '🔥', title: 'Sneaky-elite Tier 5 pick', msg: 'Whatever the doubts, when Cam Smith is dialed on a links he can win any week. huge upside here.' }
+  ],
+  'J.J. Spaun': [
+    { icon: '🏆', title: 'THE REIGNING US OPEN CHAMP AT TIER 5??', msg: 'Spaun won the 2025 US Open at brutal Oakmont in the rain — this man can grind through anything. absurd value down here. bold and brilliant.' },
+    { icon: '💧', title: 'Bad-weather warrior pick', msg: 'He proved at Oakmont he can win a major in miserable conditions. a windy Birkdale won\'t faze him one bit.' },
+    { icon: '🎲', title: 'Best longshot in the pool, arguably', msg: 'A current major champion sitting in Tier 5 is a genuine cheat code. you found it.' }
   ],
   'Adam Scott': [
-    { icon: '🟡', title: 'A FORMER MASTERS CHAMPION IS NEVER A BAD PICK. EVER.', msg: 'Adam Scott won the green jacket in 2013 and he has never stopped loving this place. The smoothest swing in golf is still dangerous.' },
-    { icon: '🎩', title: 'The smoothest man in golf said he\'s still got it', msg: 'Adam Scott\'s ball-striking is genuinely beautiful and Augusta rewards beauty. Veteran pick with actual upside. we respect it.' },
-    { icon: '⛳', title: 'Old school pick, timeless talent', msg: 'People keep writing Adam Scott off and he keeps showing up. This week might be the one that shuts everyone up for good. great pick.' }
+    { icon: '🟡', title: 'A FORMER MAJOR CHAMP IS NEVER A BAD PICK', msg: 'The smoothest swing in golf, and a man who came agonizingly close at Lytham in 2012. Adam Scott has unfinished links business. veteran value.' },
+    { icon: '🎩', title: 'The most elegant pick in the pool', msg: 'Scott\'s ball-striking is still genuinely beautiful and links golf rewards beauty. don\'t write off the classics.' },
+    { icon: '⛳', title: 'Timeless talent, timeless pick', msg: 'People keep counting him out and he keeps showing up at majors. this could be the week that quiets everyone.' }
   ],
-  'Jacob Bridgeman': [
-    { icon: '🚀', title: 'WHO IS JACOB BRIDGEMAN?? exactly. that\'s the point.', msg: 'Nobody expects him. Nobody is watching him. And that\'s exactly when a guy like this goes out and shoots 65. bold pick, we respect the chaos.' },
-    { icon: '🎲', title: 'Maximum longshot energy and we are HERE for it', msg: 'Bridgeman is a big hitter with nothing to lose and everything to prove at Augusta. If he runs hot this week you are going to be famous.' },
-    { icon: '🔥', title: 'The most unhinged Tier 5 pick in the pool and that\'s a compliment', msg: 'You didn\'t play it safe. You didn\'t pick Tiger. You picked Jacob Bridgeman and said let\'s find out. that\'s the energy.' }
+  'Hideki Matsuyama': [
+    { icon: '🌸', title: 'A MAJOR CHAMPION WITH ICE IN HIS VEINS', msg: 'Masters winner with an all-world iron game and zero panic. Hideki grinding out a links Open is completely on the table. fire Tier 5 pick.' },
+    { icon: '🎌', title: 'Quiet killer energy', msg: 'Matsuyama says nothing and just stripes it. On a demanding links, that steadiness is worth everything.' },
+    { icon: '⛳', title: 'Elite ball-striker at longshot value', msg: 'A proven major winner this far down the board is a genuine bargain. respect the pick.' }
   ],
-  'JJ Spaun': [
-    { icon: '🎲', title: 'BRO SAID "F*** IT, SPAUN" AND WE RESPECT THE CHAOS', msg: 'Absolute swing pick and if he goes low this week you are the most popular person in this entire pool. The audacity. The vision. The swag.' },
-    { icon: '🤡', title: 'Certified degenerate gambler pick (affectionate)', msg: 'JJ Spaun at Augusta is a long shot. A very long shot. But long shots pay the most. You know what you\'re doing.' },
-    { icon: '🔥', title: 'Most unhinged pick in the pool and we mean that as the highest compliment', msg: 'If Spaun goes crazy this week — and he\'s capable of it — you will be an ABSOLUTE legend. worth it.' }
+  'Wyndham Clark': [
+    { icon: '💥', title: 'US OPEN CHAMP IN TIER 5, LET\'S GO', msg: 'Clark won the 2023 US Open and bombs it a mile. If he keeps it in play at Birkdale, this longshot has serious teeth.' },
+    { icon: '🚀', title: 'Big game, big value', msg: 'A major already on the résumé and the power to overwhelm a course. that\'s a scary Tier 5 pick.' }
+  ],
+  'Dustin Johnson': [
+    { icon: '🏌️', title: 'DJ AT TIER 5 IS ROBBERY', msg: 'Former World No. 1, major champion, and a man who\'s contended at Opens for years. the talent never really leaves. sneaky pick.' },
+    { icon: '😎', title: 'Unbothered legend energy', msg: 'Nothing rattles DJ. Wind, rain, pressure — he shrugs it all off. that temperament is perfect for a links Sunday.' }
+  ],
+  'Gary Woodland': [
+    { icon: '🧠', title: 'THE COMEBACK STORY YOU WANT TO ROOT FOR', msg: 'A US Open champion who fought back from brain surgery to compete again. Woodland\'s got perspective and power. inspired pick.' },
+    { icon: '💪', title: 'Resilience personified', msg: 'If anyone can grind through a brutal links test, it\'s a man who\'s already beaten far bigger battles. love this one.' }
+  ],
+  'Keegan Bradley': [
+    { icon: '🇺🇸', title: 'THE PLAYING CAPTAIN ENERGY IS UNMATCHED', msg: 'Major champion, Ryder Cup captain, and playing some of the best golf of his life. Bradley\'s intensity travels well to a links. great value.' },
+    { icon: '🔥', title: 'Motivated Keegan is dangerous', msg: 'He\'s got a point to prove every time he tees it up. that fire is exactly what you want in a longshot.' }
+  ],
+  'Jason Day': [
+    { icon: '🌊', title: 'FORMER WORLD NO. 1 AT TIER 5', msg: 'Major champion with a gorgeous, controlled ball flight that suits the wind. When Day\'s healthy and hot he can win anywhere. terrific value.' },
+    { icon: '🎯', title: 'Veteran class, longshot price', msg: 'Jason Day knows how to manage a hard golf course. don\'t be surprised if he lingers on the leaderboard all week.' }
+  ],
+  'Rickie Fowler': [
+    { icon: '🧡', title: 'RICKIE LOVES A LINKS AND WE LOVE RICKIE', msg: 'Multiple Open top-5s — Fowler has always shown up at this championship. the fan-favorite with real links pedigree. great vibes pick.' },
+    { icon: '🎯', title: 'The people\'s champ pick', msg: 'Crowds adore him and he plays his best when he\'s enjoying it. a hot Rickie week at Birkdale would be a blast.' }
+  ],
+  'Joaquin Niemann': [
+    { icon: '🇨🇱', title: 'THE CHILEAN FIREWORK', msg: 'One of the most explosive talents in the game. If Niemann finally cracks the major code, this Tier 5 pick pays off enormously.' },
+    { icon: '🚀', title: 'Ceiling-for-days pick', msg: 'Niemann can go supernova on any given week. betting on that upside in the longshot tier is smart pool strategy.' }
+  ],
+  'Sungjae Im': [
+    { icon: '🎯', title: 'THE IRON MAN OF GOLF', msg: 'Sungjae plays more golf than anyone and grinds like nobody else. that stamina and consistency is perfect for a four-day links war.' },
+    { icon: '📊', title: 'Consistency at longshot value', msg: 'He\'s always around the top of leaderboards. Tier 5 for a player this steady is genuinely good business.' }
+  ],
+  'Corey Conners': [
+    { icon: '🍁', title: 'THE MOST ACCURATE MAN IN THE FIELD. ON A LINKS. HELLO??', msg: 'Where missing fairways gets you buried in pot bunkers, you picked the guy who never misses fairways. that\'s not a pick, that\'s a SCHEME.' },
+    { icon: '🎯', title: 'The Canadian metronome is locked in', msg: 'Conners doesn\'t beat himself. On a course that punishes mistakes mercilessly, that discipline is a massive edge. great pick.' }
+  ],
+  'Ryan Fox': [
+    { icon: '🇳🇿', title: 'THE KIWI KNOWS WIND', msg: 'Ryan Fox grew up battling gusts and plays links golf with total comfort. a genuinely dangerous longshot when the weather turns. love it.' },
+    { icon: '💪', title: 'Big-hitting, big-hearted pick', msg: 'Fox has been winning around the world and thrives on tough setups. sneaky-good Tier 5 value.' }
+  ],
+  'Sam Burns': [
+    { icon: '🔥', title: 'Dark horse pick fr fr', msg: 'Burns has the firepower and the putter to catch fire for a week. this might genuinely be that week. fire pick.' },
+    { icon: '🎯', title: 'Louisiana heat meets links chill', msg: 'Bombs it, makes everything on the greens. if the putter\'s hot at Birkdale, watch out. great value pick.' }
+  ],
+  'Maverick McNealy': [
+    { icon: '📈', title: 'MOST IMPROVED MAN YOU COULD PICK', msg: 'McNealy\'s trajectory screams breakthrough. Smart, athletic, trending up — you might be picking him at exactly the right time.' },
+    { icon: '🚀', title: 'High-flying longshot with real upside', msg: 'Nobody expects a Maverick McNealy run this week. that\'s exactly why this pick slaps so hard.' }
+  ],
+  'Haotong Li': [
+    { icon: '🐉', title: 'BIRKDALE HAS BEEN GOOD TO HIM', msg: 'Haotong Li finished 3rd at Royal Birkdale in the 2017 Open — this man has genuine history at this exact course. massive sleeper pick.' },
+    { icon: '🔥', title: 'The links dark horse', msg: 'He\'s produced his best golf at The Open before. betting on that pedigree in Tier 5 is genuinely shrewd. respect.' }
+  ],
+  'Patrick Reed': [
+    { icon: '😈', title: 'Villain arc pick and we are HERE', msg: 'Captain America thrives when the whole crowd is against him — and a UK gallery will let him hear it. major champ with real grit. bold pick.' },
+    { icon: '🎭', title: 'Chaos energy, championship pedigree', msg: 'Love him or hate him, Reed knows how to win majors and grind out hard rounds. your pick might just be the story of the week.' }
+  ],
+  'Aldrich Potgieter': [
+    { icon: '💥', title: 'THE YOUNG SOUTH AFRICAN BOMBER', msg: 'One of the longest hitters on tour and utterly fearless. Potgieter is a wild-card longshot with a genuinely huge ceiling. love the swing.' },
+    { icon: '🚀', title: 'Boom-or-bust, and we\'re here for it', msg: 'If the driver behaves, this kid can overpower a golf course. maximum-upside Tier 5 pick.' }
+  ],
+  'Alex Fitzpatrick': [
+    { icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', title: 'THE OTHER FITZPATRICK CAN PLAY TOO', msg: 'Matt\'s little brother is a proper talent in his own right, and he\'ll have the home crowd behind him. sneaky English longshot.' },
+    { icon: '👀', title: 'Home-soil sleeper', msg: 'Alex has links golf in his blood just like his brother. don\'t be shocked if he hangs around this week.' }
   ]
 };
 
-// Fallback messages for any golfer not in the list (shouldn't happen but just in case)
+// Fallback messages for any golfer not in the list — Open-themed
 const FALLBACK_HYPE = [
-  { icon: '🔥', title: 'FIREEEE!! That pick goes crazy.', msg: 'Absolutely elite selection. The rest of the pool is shaking right now. genuinely.' },
-  { icon: '👀', title: 'Bold pick. We see you.', msg: 'You didn\'t go safe and we respect it. That pick has the energy of someone who actually knows what they\'re doing.' },
-  { icon: '💅', title: 'Slay pick no notes', msg: 'Could not have picked better ourselves. This is going to look very smart by Sunday.' },
-  { icon: '🧠', title: 'Big brain move fr', msg: 'Everyone\'s going to be talking about that pick when the leaderboard updates. You saw something they didn\'t.' },
-  { icon: '😤', title: 'This pick has main character energy', msg: 'You\'re not here to participate, you\'re here to WIN. That pick reflects that. respect the vision.' }
+  { icon: '🏆', title: 'FIREEEE!! That pick goes crazy.', msg: 'Links golf turns longshots into legends. The rest of the pool is going to be checking who you picked. elite energy.' },
+  { icon: '🌬️', title: 'Bold pick. We see you.', msg: 'A grinder who thrives when the wind howls and the course bites back. you didn\'t play it safe and we respect it.' },
+  { icon: '💅', title: 'Slay pick, no notes', msg: 'The kind of dark horse that lifts the Claret Jug out of nowhere. going to look very smart by Sunday.' },
+  { icon: '🧠', title: 'Big brain move fr', msg: 'Everyone else chased the favorites. You found value in the field. that\'s how pools get won.' },
+  { icon: '😤', title: 'This pick has main character energy', msg: 'You\'re not here to participate, you\'re here to WIN. one hot week on this links and you\'re a genius. respect the vision.' }
 ];
 
 // ── Access code gate ──────────────────────────────────────────────────────────
@@ -243,7 +279,7 @@ function populateTiers() {
     (tiers[`tier${t}`] || []).forEach(g => {
       const opt = document.createElement('option');
       opt.value = g.name;
-      opt.textContent = `${g.name} (+${g.odds})`;
+      opt.textContent = g.odds != null ? `${g.name} (+${g.odds})` : g.name;
       sel.appendChild(opt);
     });
     sel.addEventListener('change', () => maybeShowHype(sel.value));

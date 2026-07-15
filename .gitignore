@@ -1,3 +1,6 @@
 node_modules/
 .env
 *.log
+
+# Live data file — persisted on the Railway volume, seeded from entries.seed.json
+data/entries.json

@@ -2,25 +2,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* U.S. Open red / white / blue theme.
+  /* The Open — navy & Claret Jug gold theme.
      The app is themed through these tokens: --green* = the navy base,
-     --gold* = red/white accents. Re-pointing them re-skins the whole site. */
-  --green: #0a3161;        /* Old Glory navy (primary) */
-  --green-dark: #041e42;   /* deep navy */
-  --green-light: #1d4e89;
-  --gold: #b31942;         /* Old Glory red (accent) */
-  --gold-light: #ffffff;   /* white (on-navy text & buttons) */
-  --navy: #0a3161;
-  --usa-red: #b31942;
-  --cream: #eef2f9;        /* cool off-white background */
+     --gold* = gold accents. Re-pointing them re-skins the whole site. */
+  --green: #0a1f44;        /* championship navy (primary) */
+  --green-dark: #06152f;   /* deep navy */
+  --green-light: #16345f;
+  --gold: #c8a24b;         /* Claret Jug gold (accent) */
+  --gold-light: #f0e2b8;   /* pale gold (on-navy text & buttons) */
+  --navy: #0a1f44;
+  --usa-red: #c8a24b;      /* legacy token — now gold accent */
+  --cream: #f5f1e6;        /* warm off-white background */
   --white: #ffffff;
-  --gray-100: #f1f4fa;
-  --gray-200: #dfe4ee;
-  --gray-400: #8a93a6;
-  --gray-600: #4d5666;
-  --gray-800: #1c2433;
+  --gray-100: #f4f1ea;
+  --gray-200: #e4ddcf;
+  --gray-400: #9a927f;
+  --gray-600: #5b5442;
+  --gray-800: #26221a;
   --red: #b31942;
-  --blue: #0a3161;
+  --blue: #0a1f44;
   --shadow: 0 2px 8px rgba(0,0,0,0.12);
   --shadow-lg: 0 4px 20px rgba(0,0,0,0.18);
   --radius: 8px;
@@ -841,9 +841,9 @@ footer {
   .prize-banner  { gap: 4px; }
 }
 
-/* ── U.S. Open red/white/blue flair ──────────────────────────────────────────── */
+/* ── The Open navy & gold flair ──────────────────────────────────────────────── */
 
-/* Brand emblem (replaces the old ⛳ emoji) */
+/* Brand emblem (the Claret Jug) */
 .header-logo {
   width: 42px;
   height: 42px;
@@ -860,32 +860,26 @@ footer {
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
 }
 
-/* Old Glory stripe under the header */
-header { border-bottom: 4px solid var(--usa-red); }
+/* Gold stripe under the header */
+header { border-bottom: 4px solid var(--gold); }
 
-/* Stars-and-stripes accent strip on banners */
+/* Gold accent strip on banners */
 .prize-banner,
 .picks-cta {
-  border-top: 3px solid var(--usa-red);
+  border-top: 3px solid var(--gold);
   background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
 }
 
-/* Title pops white; the gold-accent labels go patriotic red */
-.header-text h1 { color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
-.prize-item .place { color: #ff8aa0; }
+/* Title in pale gold on navy */
+.header-text h1 { color: var(--gold-light); text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.prize-item .place { color: var(--gold); }
 
-/* Leader badge: white text on red reads better than navy-on-red */
-.pos-1 { color: #ffffff; }
+/* Leader badge: navy text on gold */
+.pos-1 { background: var(--gold); color: var(--green-dark); }
 
-/* Keep button labels legible on the red hover state */
+/* Keep button labels legible on the gold hover state */
 .picks-header-btn:hover,
-.picks-cta-btn:hover { color: #ffffff; }
+.picks-cta-btn:hover { color: var(--green-dark); }
 
-/* Live dot in patriotic blue rather than green */
-.live-dot { background: #4aa3ff; box-shadow: 0 0 0 0 rgba(74,163,255,0.6); }
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(74,163,255,0.6); }
-  70%  { box-shadow: 0 0 0 6px rgba(74,163,255,0); }
-  100% { box-shadow: 0 0 0 0 rgba(74,163,255,0); }
-}
-.live-dot.stale { background: var(--usa-red); }
+/* Live dot stays green when live, gold when stale */
+.live-dot.stale { background: var(--gold); }

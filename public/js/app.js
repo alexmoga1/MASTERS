@@ -258,7 +258,7 @@ function refreshNow() {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 // Hide submit CTA after deadline
-const SUBMISSION_DEADLINE = new Date('2026-06-18T10:35:00Z');
+const SUBMISSION_DEADLINE = new Date('2026-07-16T05:35:00Z');
 if (Date.now() >= SUBMISSION_DEADLINE) {
   const cta = document.getElementById('picksCta');
   if (cta) cta.style.display = 'none';

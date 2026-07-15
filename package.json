@@ -1,7 +1,7 @@
 {
   "name": "masters-pool",
   "version": "1.0.0",
-  "description": "2026 U.S. Open Golf Pool Tracker",
+  "description": "The Open 2026 Golf Pool Tracker",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

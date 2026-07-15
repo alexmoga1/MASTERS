@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — 2026 U.S. Open Pool</title>
-  <link rel="icon" type="image/svg+xml" href="/images/usopen-logo.svg" />
+  <title>Admin — The Open 2026 Pool</title>
+  <link rel="icon" type="image/svg+xml" href="/images/theopen-logo.svg" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body class="admin-page">
@@ -12,9 +12,9 @@
   <!-- Password Gate -->
   <div id="authGate" class="auth-gate">
     <div class="auth-card">
-      <img class="auth-logo" src="/images/usopen-logo.svg" alt="U.S. Open 2026" />
+      <img class="auth-logo" src="/images/theopen-logo.svg" alt="The Open 2026" />
       <h2>Admin Access</h2>
-      <p>2026 U.S. Open Pool</p>
+      <p>The Open 2026 Pool</p>
       <input
         type="password"
         id="passwordInput"
@@ -30,10 +30,10 @@
   <div id="adminPanel" style="display:none">
     <header>
       <div class="header-inner">
-        <img class="header-logo" src="/images/usopen-logo.svg" alt="U.S. Open 2026" />
+        <img class="header-logo" src="/images/theopen-logo.svg" alt="The Open 2026" />
         <div class="header-text">
           <h1>Admin Panel</h1>
-          <p class="header-sub">2026 U.S. Open Pool</p>
+          <p class="header-sub">The Open 2026 Pool</p>
         </div>
         <a href="/" class="back-btn">← Leaderboard</a>
       </div>
@@ -176,6 +176,56 @@
         <p>Cache refreshes automatically every 60 seconds. Force a refresh below.</p>
         <button class="btn-secondary" onclick="forceRefresh()">↻ Force Refresh Now</button>
         <p id="refreshMsg" class="form-ok"></p>
+      </section>
+
+      <!-- Tournament history -->
+      <section class="admin-section">
+        <div class="section-header">
+          <h2>Tournament History</h2>
+          <button class="btn-secondary" onclick="snapshotNow()">📸 Snapshot Current Now</button>
+        </div>
+        <p style="padding:0 20px;color:#6b6b5e;font-size:0.85rem">
+          Finished tournaments are archived automatically once every golfer is final.
+          Use “Snapshot Current Now” to freeze the standings manually.
+        </p>
+        <p id="snapshotMsg" class="form-ok" style="padding:0 20px"></p>
+
+        <div class="table-wrap">
+          <table class="lb-table" id="archiveTable">
+            <thead>
+              <tr>
+                <th>TOURNAMENT</th>
+                <th>YEAR</th>
+                <th>WINNER</th>
+                <th>ENTRANTS</th>
+                <th>POOL</th>
+                <th>ARCHIVED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="archiveBody">
+              <tr><td colspan="7" class="loading-cell">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Frozen leaderboard for the selected archive -->
+        <div id="archiveDetail" style="display:none;padding:0 20px 20px">
+          <div class="section-header" style="padding-left:0;padding-right:0">
+            <h3 id="archiveDetailTitle" style="margin:0"></h3>
+            <button class="btn-secondary" onclick="closeArchive()">✕ Close</button>
+          </div>
+          <div class="table-wrap">
+            <table class="lb-table">
+              <thead>
+                <tr>
+                  <th>POS</th><th>NAME</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>TOTAL</th>
+                </tr>
+              </thead>
+              <tbody id="archiveLbBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
     </main>

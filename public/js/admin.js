@@ -29,7 +29,7 @@ function login() {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 async function init() {
-  await Promise.all([loadTiers(), loadParticipants(), loadSettings()]);
+  await Promise.all([loadTiers(), loadParticipants(), loadSettings(), loadArchives()]);
 }
 
 async function loadTiers() {
@@ -48,7 +48,7 @@ function populateTierSelects() {
     (tiers[`tier${t}`] || []).forEach(g => {
       const opt = document.createElement('option');
       opt.value = g.name;
-      opt.textContent = `${g.name} (+${g.odds})`;
+      opt.textContent = g.odds != null ? `${g.name} (+${g.odds})` : g.name;
       sel.appendChild(opt);
     });
   }
@@ -60,7 +60,7 @@ function populateTierSelects() {
     (tiers.tier5 || []).forEach(g => {
       const opt = document.createElement('option');
       opt.value = g.name;
-      opt.textContent = `${g.name} (+${g.odds})`;
+      opt.textContent = g.odds != null ? `${g.name} (+${g.odds})` : g.name;
       sel5.appendChild(opt);
     });
   }
@@ -329,6 +329,118 @@ async function setLock(locked) {
   } catch (err) {
     msg.textContent = 'Network error.';
     msg.style.color = 'var(--red)';
+  }
+}
+
+// ── Tournament history ────────────────────────────────────────────────────────
+
+function scoreCls(score) {
+  if (score === null || score === undefined) return 'score-dash';
+  if (score < 0) return 'score-under';
+  if (score === 0) return 'score-even';
+  return 'score-over';
+}
+
+async function loadArchives() {
+  try {
+    const res = await fetch('/api/archives');
+    const archives = await res.json();
+    renderArchives(archives);
+  } catch (e) {
+    const body = document.getElementById('archiveBody');
+    if (body) body.innerHTML = '<tr><td colspan="7" class="loading-cell">Failed to load history.</td></tr>';
+  }
+}
+
+function renderArchives(archives) {
+  const body = document.getElementById('archiveBody');
+  if (!body) return;
+  if (!archives.length) {
+    body.innerHTML = '<tr><td colspan="7" class="loading-cell">No archived tournaments yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = archives.map(a => `
+    <tr>
+      <td><strong>${a.tournamentName}</strong>${a.course ? `<br><span style="color:#9a9a8e;font-size:0.78rem">${a.course}</span>` : ''}</td>
+      <td>${a.year ?? '-'}</td>
+      <td>${a.winner || '-'}</td>
+      <td>${a.entrants}</td>
+      <td>$${a.totalPool}</td>
+      <td style="font-size:0.8rem;color:#6b6b5e">${a.archivedAt ? new Date(a.archivedAt).toLocaleDateString() : '-'}</td>
+      <td><button class="btn-edit" onclick="viewArchive('${a.id}')">View</button></td>
+    </tr>
+  `).join('');
+}
+
+async function viewArchive(id) {
+  try {
+    const res = await fetch(`/api/archives/${encodeURIComponent(id)}`);
+    if (!res.ok) throw new Error('not found');
+    const a = await res.json();
+    renderArchiveDetail(a);
+  } catch (e) {
+    alert('Could not load that archive.');
+  }
+}
+
+function renderArchiveDetail(a) {
+  document.getElementById('archiveDetailTitle').textContent =
+    `${a.tournamentName}${a.year ? ' ' + a.year : ''} — Final Standings`;
+
+  const lb = a.leaderboard || [];
+  document.getElementById('archiveLbBody').innerHTML = lb.map((p, idx) => {
+    const tied = idx > 0 && lb[idx - 1].position === p.position && p.position !== '-';
+    const posDisplay = p.position === '-' ? '-' : (tied ? `T${p.position}` : p.position);
+    return `
+      <tr>
+        <td class="col-pos"><span class="pos-badge ${posClass(p.position)}">${posDisplay}</span></td>
+        <td class="col-name">${p.name}</td>
+        <td class="col-round ${scoreCls(p.roundScores[0])}">${fmtNum(p.roundScores[0])}</td>
+        <td class="col-round ${scoreCls(p.roundScores[1])}">${fmtNum(p.roundScores[1])}</td>
+        <td class="col-round ${scoreCls(p.roundScores[2])}">${fmtNum(p.roundScores[2])}</td>
+        <td class="col-round ${scoreCls(p.roundScores[3])}">${fmtNum(p.roundScores[3])}</td>
+        <td class="col-total ${scoreCls(p.total)}">${p.roundsWithData ? fmtNum(p.total) : '-'}</td>
+      </tr>`;
+  }).join('');
+
+  const detail = document.getElementById('archiveDetail');
+  detail.style.display = 'block';
+  detail.scrollIntoView({ behavior: 'smooth' });
+}
+
+function posClass(pos) {
+  if (pos === 1) return 'pos-1';
+  if (pos === 2) return 'pos-2';
+  if (pos === 3) return 'pos-3';
+  return 'pos-other';
+}
+
+function closeArchive() {
+  document.getElementById('archiveDetail').style.display = 'none';
+}
+
+async function snapshotNow() {
+  const msg = document.getElementById('snapshotMsg');
+  msg.style.color = '#166534';
+  msg.textContent = 'Archiving current standings…';
+  try {
+    const res = await fetch('/api/admin/archive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword })
+    });
+    const result = await res.json();
+    if (!res.ok) {
+      msg.style.color = 'var(--red)';
+      msg.textContent = result.error || 'Snapshot failed.';
+      return;
+    }
+    msg.textContent = `Snapshot saved (${result.archive.entrants} entrants${result.archive.winner ? `, leader: ${result.archive.winner}` : ''}).`;
+    await loadArchives();
+    setTimeout(() => { msg.textContent = ''; }, 4000);
+  } catch (e) {
+    msg.style.color = 'var(--red)';
+    msg.textContent = 'Network error.';
   }
 }
 

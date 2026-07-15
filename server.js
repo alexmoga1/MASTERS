@@ -5,21 +5,50 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'us2026';
-const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'us123';
-// U.S. Open 2026 first tee — June 18, 2026 6:35am ET = 10:35am UTC
-const SUBMISSION_DEADLINE = new Date('2026-06-18T10:35:00Z');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'open2026';
+const SUBMIT_CODE    = process.env.SUBMIT_CODE    || 'open123';
+// The Open 2026 first tee — July 16, 2026 6:35am BST = 5:35am UTC
+const SUBMISSION_DEADLINE = new Date('2026-07-16T05:35:00Z');
 
 // Cache live scores for 60 seconds
 let scoreCache = { data: null, timestamp: 0 };
 const CACHE_TTL = 60 * 1000;
 
-const DATA_FILE = path.join(__dirname, 'data', 'entries.json');
+// Whether the most recent parse found an event actually matching the configured
+// tournamentName (vs. falling back to unrelated live events). Gates auto-archive
+// so we never freeze the wrong tournament's leaderboard.
+let scoresMatchedTournament = false;
+
+// DATA_DIR lets Railway (or any host) point the live data file at a persistent
+// volume — e.g. DATA_DIR=/data mounted as a Railway Volume. Falls back to the
+// repo's ./data for local dev. The live file is NOT tracked in git; on first
+// boot (fresh volume) it is seeded from the committed entries.seed.json.
+const DATA_DIR  = process.env.DATA_DIR || path.join(__dirname, 'data');
+const DATA_FILE = path.join(DATA_DIR, 'entries.json');
+const SEED_FILE = path.join(__dirname, 'data', 'entries.seed.json');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Data helpers ──────────────────────────────────────────────────────────────
+
+// Create the data directory and seed the live file if it doesn't exist yet.
+// Safe to call repeatedly — it only writes when the file is missing, so it
+// never clobbers data already living on the volume.
+function ensureDataFile() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    if (!fs.existsSync(DATA_FILE)) {
+      const seed = fs.existsSync(SEED_FILE)
+        ? fs.readFileSync(SEED_FILE, 'utf8')
+        : JSON.stringify({ participants: [], tiers: {}, settings: {}, archives: [] }, null, 2);
+      fs.writeFileSync(DATA_FILE, seed);
+      console.log(`[data] Seeded ${DATA_FILE}${fs.existsSync(SEED_FILE) ? ' from entries.seed.json' : ' (empty template)'}`);
+    }
+  } catch (e) {
+    console.error('[data] ensureDataFile failed:', e.message);
+  }
+}
 
 function loadData() {
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -63,7 +92,7 @@ async function fetchLiveScores() {
 
   const { tournamentName } = loadData().settings;
 
-  // ESPN golf leaderboard — the live source for the U.S. Open.
+  // ESPN golf leaderboard — the live source for The Open.
   try {
     const res = await fetch(
       'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard',
@@ -103,7 +132,10 @@ function parseESPNData(json, tournamentName) {
       (e.name || '').toLowerCase().includes(want) ||
       (e.shortName || '').toLowerCase().includes(want)
     );
+    scoresMatchedTournament = matched.length > 0;
     if (matched.length) events = matched;
+  } else {
+    scoresMatchedTournament = false; // no configured tournament → never auto-archive
   }
 
   for (const event of events) {
@@ -140,6 +172,7 @@ function parseESPNData(json, tournamentName) {
           rounds,
           total,
           thru,
+          state, // 'pre' | 'in' | 'post' — used to detect a finished tournament
           status: missed_cut ? 'cut' : 'active',
           completedRounds
         });
@@ -292,6 +325,58 @@ function calculatePayouts(numPlayers, buyIn) {
   ];
 }
 
+// ── Tournament archiving ────────────────────────────────────────────────────
+
+// A tournament is "complete" once every player who made the cut has finished
+// (ESPN marks their state 'post'). Cut/WD/DQ players are excluded from the check.
+function isTournamentComplete(liveScores) {
+  const active = liveScores.filter(p => !p.missed_cut);
+  return liveScores.length > 0 && active.length > 0 && active.every(p => p.state === 'post');
+}
+
+function archiveId(settings) {
+  return `${settings.year || 'tournament'}-${normalizeName(settings.tournamentName || 'event').replace(/\s+/g, '-')}`;
+}
+
+// Build a frozen snapshot of the finished tournament: final standings, payouts
+// and metadata. Stored verbatim so it renders identically after ESPN drops the
+// event from its live feed.
+function buildArchive(data, leaderboard, liveScores) {
+  const s = data.settings || {};
+  return {
+    id: archiveId(s),
+    tournamentName: s.tournamentName || 'Tournament',
+    year: s.year || null,
+    course: s.course || null,
+    buyIn: s.buyIn || 0,
+    totalPool: data.participants.length * (s.buyIn || 0),
+    payouts: calculatePayouts(data.participants.length, s.buyIn || 0),
+    penalties: {
+      round3: data.penaltyScores?.round3 ?? autoPenalty(liveScores, 2),
+      round4: data.penaltyScores?.round4 ?? autoPenalty(liveScores, 3)
+    },
+    archivedAt: new Date().toISOString(),
+    leaderboard
+  };
+}
+
+// Auto-archive once, when the tournament finishes. Idempotent: skips if an
+// archive already exists for this tournament + year. Returns true if it wrote.
+function maybeAutoArchive(data, leaderboard, liveScores) {
+  // Only auto-archive when the live feed actually matched the configured
+  // tournament — never freeze an unrelated event that slipped in via fallback.
+  if (!scoresMatchedTournament) return false;
+  if (!isTournamentComplete(liveScores)) return false;
+  if (!Array.isArray(data.archives)) data.archives = [];
+  const id = archiveId(data.settings || {});
+  if (data.archives.some(a => a.id === id)) return false;
+
+  data.archives.push(buildArchive(data, leaderboard, liveScores));
+  saveData(data);
+  console.log(`[archive] Auto-archived ${id}`);
+  return true;
+}
+
 // ── API Routes ────────────────────────────────────────────────────────────────
 
 // Leaderboard (main page data)
@@ -301,6 +386,9 @@ app.get('/api/leaderboard', async (req, res) => {
     const liveScores = await fetchLiveScores();
     const leaderboard = calculateLeaderboard(data.participants, liveScores, data.penaltyScores);
     const payouts = calculatePayouts(data.participants.length, data.settings.buyIn);
+
+    // Freeze the standings the moment the tournament finishes (runs once).
+    maybeAutoArchive(data, leaderboard, liveScores);
 
     res.json({
       leaderboard,
@@ -344,6 +432,64 @@ app.get('/api/entries', (req, res) => {
   try {
     const data = loadData();
     res.json(data.participants);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Archived tournaments — list (metadata + winner only, lightweight)
+app.get('/api/archives', (req, res) => {
+  try {
+    const data = loadData();
+    const archives = (data.archives || [])
+      .map(a => ({
+        id: a.id,
+        tournamentName: a.tournamentName,
+        year: a.year,
+        course: a.course,
+        totalPool: a.totalPool,
+        archivedAt: a.archivedAt,
+        winner: a.leaderboard?.[0]?.name || null,
+        entrants: a.leaderboard?.length || 0
+      }))
+      .sort((a, b) => (b.year || 0) - (a.year || 0));
+    res.json(archives);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Archived tournament — full frozen leaderboard
+app.get('/api/archives/:id', (req, res) => {
+  try {
+    const data = loadData();
+    const archive = (data.archives || []).find(a => a.id === req.params.id);
+    if (!archive) return res.status(404).json({ error: 'Archive not found' });
+    res.json(archive);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Manual snapshot — archive the current standings now (admin fallback in case
+// auto-detection misses, or to re-freeze a correction). Upserts by archive id.
+app.post('/api/admin/archive', async (req, res) => {
+  const { password } = req.body;
+  if (password !== ADMIN_PASSWORD) return res.status(401).json({ error: 'Invalid password' });
+
+  try {
+    const data = loadData();
+    const liveScores = await fetchLiveScores();
+    const leaderboard = calculateLeaderboard(data.participants, liveScores, data.penaltyScores);
+    const archive = buildArchive(data, leaderboard, liveScores);
+
+    if (!Array.isArray(data.archives)) data.archives = [];
+    const idx = data.archives.findIndex(a => a.id === archive.id);
+    if (idx === -1) data.archives.push(archive);
+    else data.archives[idx] = archive; // overwrite an existing snapshot
+
+    saveData(data);
+    res.json({ success: true, archive: { id: archive.id, entrants: leaderboard.length, winner: leaderboard[0]?.name || null } });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -473,9 +619,10 @@ app.post('/api/refresh', async (req, res) => {
 // ── Start ─────────────────────────────────────────────────────────────────────
 
 if (require.main === module) {
+  ensureDataFile();
   app.listen(PORT, () => {
-    console.log(`U.S. Open Pool running on http://localhost:${PORT}`);
+    console.log(`The Open Pool running on http://localhost:${PORT}`);
   });
 }
 
-module.exports = { calculateLeaderboard, parseESPNData, autoPenalty, findGolfer, normalizeName };
+module.exports = { calculateLeaderboard, parseESPNData, autoPenalty, findGolfer, normalizeName, isTournamentComplete, buildArchive };
