@@ -29,7 +29,11 @@
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%; /* stop iOS enlarging text in landscape */
+  text-size-adjust: 100%;
+}
 body {
   font-family: var(--font-sans);
   background: var(--cream);
@@ -37,7 +41,17 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* never allow horizontal scroll on mobile */
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Kill the grey tap flash on iOS for interactive rows/buttons */
+a, button, [role="button"], .main-row, .stat-row {
+  -webkit-tap-highlight-color: rgba(0,0,0,0.06);
+}
+
+/* Lock background scroll while a modal is open */
+body.modal-open { overflow: hidden; }
 
 /* ── Header ────────────────────────────────────────────────────────────────── */
 header {
@@ -53,6 +67,8 @@ header {
   max-width: 1100px;
   margin: 0 auto;
   padding: 16px 20px;
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
   display: flex;
   align-items: center;
   gap: 16px;
@@ -154,6 +170,8 @@ main {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
   flex: 1;
   width: 100%;
 }
@@ -502,6 +520,7 @@ tr.detail-row.open .detail-inner { display: block; }
 footer {
   text-align: center;
   padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
   font-size: 0.82rem;
   color: var(--gray-400);
   border-top: 1px solid var(--gray-200);
@@ -883,3 +902,220 @@ header { border-bottom: 4px solid var(--gold); }
 
 /* Live dot stays green when live, gold when stale */
 .live-dot.stale { background: var(--gold); }
+
+/* ── Tab navigation ──────────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  background: var(--white);
+  padding: 6px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.tab-btn {
+  flex: 1;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 12px 10px;
+  min-height: 44px; /* comfortable tap target */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  letter-spacing: 0.3px;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
+  color: var(--gold-light);
+  box-shadow: inset 0 -3px 0 var(--gold);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.lb-subtle { font-size: 0.75rem; color: var(--gray-400); font-style: italic; }
+
+/* ── Stats board ─────────────────────────────────────────────────────────────── */
+.stats-table .col-picks { text-align: center; width: 64px; white-space: nowrap; }
+.stats-table .col-thru  { text-align: center; width: 56px; color: var(--gray-600); font-size: 0.82rem; }
+
+.stat-row { cursor: pointer; transition: background 0.15s; border-bottom: 1px solid var(--gray-200); }
+.stat-row:hover { background: var(--gray-100); }
+.stat-row:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+.stat-row.is-cut { opacity: 0.62; }
+
+.golfer-nm { font-weight: 600; }
+
+.pos-cut {
+  background: transparent;
+  color: var(--gray-400);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.pick-count {
+  display: inline-block;
+  background: var(--green);
+  color: var(--gold-light);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+.pick-zero { color: var(--gray-400); font-size: 0.8rem; }
+
+.picker-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.picker-chip {
+  display: inline-block;
+  font-size: 0.68rem;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 1px 8px;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Scorecard modal ─────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  background: rgba(6, 21, 47, 0.55);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  animation: overlay-in 0.2s ease;
+}
+.modal-overlay[hidden] { display: none; }
+
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-card {
+  position: relative;
+  background: var(--white);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+  border-top: 4px solid var(--gold);
+  padding: 22px 20px 24px;
+  animation: card-in 0.22s cubic-bezier(0.34,1.4,0.64,1);
+}
+
+@keyframes card-in {
+  from { transform: translateY(16px) scale(0.98); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--gray-200); }
+
+.sc-head { padding-right: 44px; margin-bottom: 16px; }
+.sc-name {
+  font-family: var(--font);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  line-height: 1.15;
+}
+.sc-meta { display: flex; align-items: baseline; gap: 12px; margin-top: 6px; }
+.sc-pos { font-size: 0.85rem; color: var(--gray-600); }
+.sc-total { font-size: 1.5rem; font-weight: 700; font-family: var(--font); }
+
+.sc-status { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: var(--gray-600); }
+.sc-status.live { color: #15803d; font-weight: 700; }
+.sc-status.cut  { color: var(--red); font-weight: 700; }
+
+.scorecard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0 4px;
+  font-size: 0.92rem;
+}
+.scorecard-table th {
+  background: var(--green-dark);
+  color: var(--gold-light);
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.6px;
+}
+.scorecard-table th:not(:first-child) { text-align: center; }
+.scorecard-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray-200); }
+.sc-round { font-weight: 700; color: var(--gray-800); }
+.sc-cell { text-align: center; font-weight: 600; }
+.sc-pen {
+  font-size: 0.58rem; font-weight: 700; color: #92400e;
+  background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 0 5px; margin-left: 4px;
+}
+
+.sc-pickers { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--gray-200); }
+.sc-pickers-label { font-size: 0.78rem; font-weight: 700; color: var(--gray-600); margin-bottom: 8px; }
+
+/* ── iOS input zoom guard: inputs must be ≥16px or Safari zooms on focus ──────── */
+.form-group input,
+.form-group select,
+.auth-card input,
+#codeInput,
+#passwordInput {
+  font-size: 16px;
+}
+
+/* ── Mobile refinements (iPhone) ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Header: let the status controls wrap instead of forcing overflow */
+  .header-inner { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+  .header-status { width: 100%; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+  .header-logo { width: 36px; height: 36px; }
+
+  .tab-btn { font-size: 0.9rem; padding: 11px 6px; }
+
+  /* Stats table: keep it readable, chips wrap under the name */
+  .stats-table .col-thru { display: none; }
+  .picker-chip { max-width: 96px; font-size: 0.66rem; }
+  .pick-count { font-size: 0.68rem; padding: 2px 7px; }
+
+  .modal-card { max-width: 100%; max-height: 90vh; border-radius: 14px 14px 0 0; }
+  .sc-name { font-size: 1.2rem; }
+  .sc-total { font-size: 1.3rem; }
+}
+
+@media (max-width: 380px) {
+  .header-text h1 { font-size: 1rem; }
+  .picks-header-btn, .admin-header-btn { padding: 5px 10px; font-size: 0.76rem; }
+  .lb-table th, .lb-table td { padding: 8px 6px; }
+}

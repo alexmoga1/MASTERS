@@ -242,6 +242,7 @@ function startCountdown() {
     if (countdown <= 0) {
       countdown = REFRESH_INTERVAL;
       load();
+      if (activeTab === 'stats') loadStats();
     }
   }, 1000);
 }
@@ -250,10 +251,154 @@ function refreshNow() {
   const btn = document.getElementById('refreshBtn');
   if (btn) btn.disabled = true;
   countdown = REFRESH_INTERVAL;
-  load().finally(() => {
+  const jobs = [load()];
+  if (activeTab === 'stats') jobs.push(loadStats());
+  Promise.allSettled(jobs).finally(() => {
     if (btn) btn.disabled = false;
   });
 }
+
+// ── Tabs ───────────────────────────────────────────────────────────────────────
+
+let activeTab = 'leaderboard';
+let statsData = null;
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === `panel-${tab}`);
+  });
+  if (tab === 'stats' && !statsData) loadStats();
+}
+
+// ── Stats board ─────────────────────────────────────────────────────────────────
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+async function loadStats() {
+  try {
+    const res = await fetch('/api/stats');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    statsData = await res.json();
+    renderStats(statsData);
+  } catch (e) {
+    console.error('Stats load failed:', e);
+    const body = document.getElementById('statsBody');
+    if (body) body.innerHTML = '<tr><td colspan="5" class="loading-cell">Failed to load stats. Retrying…</td></tr>';
+  }
+}
+
+function renderStats(data) {
+  const tbody = document.getElementById('statsBody');
+  const golfers = data.golfers || [];
+  if (!golfers.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="loading-cell">No field data yet.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = golfers.map((g, idx) => {
+    const pos = g.missed_cut ? 'CUT' : (g.position && g.position !== '-' ? g.position : '–');
+    const posCls = g.missed_cut ? 'pos-cut' : posClass(typeof g.position === 'string' && /^\d+$/.test(g.position) ? +g.position : 0);
+    const chips = g.pickCount
+      ? `<div class="picker-chips">${g.pickedBy.map(n => `<span class="picker-chip">${escapeHtml(n)}</span>`).join('')}</div>`
+      : '';
+    const scoreVal = g.total !== null && g.total !== undefined ? fmt(g.total) : '-';
+    const thru = g.missed_cut ? '—' : (g.thru && g.thru !== '-' ? g.thru : (g.state === 'pre' ? 'Thu' : '-'));
+    return `
+      <tr class="stat-row${g.missed_cut ? ' is-cut' : ''}" onclick="openScorecard(${idx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openScorecard(${idx})}" tabindex="0" role="button" aria-label="View ${escapeHtml(g.name)} scorecard">
+        <td class="col-pos"><span class="pos-badge ${posCls}">${pos}</span></td>
+        <td class="col-name"><span class="golfer-nm">${escapeHtml(g.name)}</span>${chips}</td>
+        <td class="col-picks">${g.pickCount ? `<span class="pick-count">👥 ${g.pickCount}</span>` : '<span class="pick-zero">—</span>'}</td>
+        <td class="col-total ${scoreClass(g.total)}">${scoreVal}</td>
+        <td class="col-thru">${thru}</td>
+      </tr>`;
+  }).join('');
+}
+
+// ── Scorecard modal ──────────────────────────────────────────────────────────────
+
+function openScorecard(idx) {
+  const g = statsData && statsData.golfers && statsData.golfers[idx];
+  if (!g) return;
+  document.getElementById('modalContent').innerHTML = renderScorecard(g);
+  const modal = document.getElementById('scorecardModal');
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+  document.getElementById('modalClose').focus();
+}
+
+function closeScorecard() {
+  document.getElementById('scorecardModal').hidden = true;
+  document.body.classList.remove('modal-open');
+}
+
+function renderScorecard(g) {
+  const cut = g.missed_cut;
+  const totalTxt = (g.total !== null && g.total !== undefined) ? fmt(g.total) : 'E';
+  const posTxt = cut ? 'Missed Cut' : (g.position && g.position !== '-' ? `Position ${g.position}` : 'Not started');
+
+  // Round-by-round table with running cumulative to-par.
+  let cum = 0;
+  const roundRows = [0, 1, 2, 3].map(ri => {
+    const s = g.rounds ? g.rounds[ri] : null;
+    const played = s !== null && s !== undefined;
+    if (played) cum += s;
+    const isPenalty = cut && ri >= 2;
+    return `
+      <tr>
+        <td class="sc-round">R${ri + 1}${isPenalty ? ' <span class="sc-pen">CUT PEN</span>' : ''}</td>
+        <td class="sc-cell ${played ? scoreClass(s) : 'score-dash'}">${played ? fmt(s) : '–'}</td>
+        <td class="sc-cell ${played ? scoreClass(cum) : 'score-dash'}">${played ? fmt(cum) : '–'}</td>
+      </tr>`;
+  }).join('');
+
+  const thruLine = cut
+    ? '<span class="sc-status cut">Missed the cut</span>'
+    : (g.state === 'in'
+        ? `<span class="sc-status live">● Live · Thru ${g.thru || '-'}</span>`
+        : (g.state === 'post'
+            ? '<span class="sc-status">Round complete</span>'
+            : '<span class="sc-status">Tees off Thursday</span>'));
+
+  const pickers = g.pickCount
+    ? `<div class="sc-pickers">
+         <div class="sc-pickers-label">Picked by ${g.pickCount} ${g.pickCount === 1 ? 'player' : 'players'}</div>
+         <div class="picker-chips">${g.pickedBy.map(n => `<span class="picker-chip">${escapeHtml(n)}</span>`).join('')}</div>
+       </div>`
+    : '<div class="sc-pickers"><div class="sc-pickers-label">Not picked by anyone in the league</div></div>';
+
+  return `
+    <div class="sc-head">
+      <div class="sc-name" id="modalGolferName">${escapeHtml(g.name)}</div>
+      <div class="sc-meta">
+        <span class="sc-pos">${posTxt}</span>
+        <span class="sc-total ${scoreClass(g.total)}">${totalTxt}</span>
+      </div>
+      ${thruLine}
+    </div>
+    <table class="scorecard-table">
+      <thead><tr><th>Round</th><th>To Par</th><th>Total</th></tr></thead>
+      <tbody>${roundRows}</tbody>
+    </table>
+    ${pickers}
+  `;
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('scorecardModal');
+    if (modal && !modal.hidden) closeScorecard();
+  }
+});
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 

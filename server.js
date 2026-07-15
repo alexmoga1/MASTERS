@@ -437,6 +437,51 @@ app.get('/api/entries', (req, res) => {
   }
 });
 
+// Stats board — every golfer in the field with their score + which league
+// members picked them. Ordered as ESPN returns them (official leaderboard order).
+app.get('/api/stats', async (req, res) => {
+  try {
+    const data = loadData();
+    const liveScores = await fetchLiveScores();
+
+    // Reverse-map picks → golfers using the same matcher scoring uses, so the
+    // pick counts here always agree with the leaderboard.
+    const pickMap = {}; // golfer.nameNorm -> [participant name, ...]
+    for (const p of data.participants) {
+      for (const pick of (p.picks || [])) {
+        const g = findGolfer(liveScores, pick);
+        if (g) (pickMap[g.nameNorm] = pickMap[g.nameNorm] || []).push(p.name);
+      }
+    }
+
+    const golfers = liveScores.map(g => {
+      const pickedBy = pickMap[g.nameNorm] || [];
+      return {
+        name: g.name,
+        position: g.position,
+        total: g.total,
+        thru: g.thru,
+        rounds: g.rounds,
+        missed_cut: g.missed_cut,
+        state: g.state,
+        status: g.status,
+        completedRounds: g.completedRounds,
+        pickCount: pickedBy.length,
+        pickedBy
+      };
+    });
+
+    res.json({
+      golfers,
+      par: data.settings.par ?? null,
+      lastUpdated: scoreCache.timestamp ? new Date(scoreCache.timestamp).toISOString() : null
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Archived tournaments — list (metadata + winner only, lightweight)
 app.get('/api/archives', (req, res) => {
   try {
