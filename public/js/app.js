@@ -279,9 +279,10 @@ function refreshNow() {
 let activeTab = 'leaderboard';
 let statsData = null;
 
-// Stats sort state. Default 'pos' = the leaderboard order the API returns
-// (official standings, lowest score first). Each column has a natural first
-// direction; clicking the active column again toggles it.
+// Stats sort state. Default 'pos' = finishing-position order (official
+// standings, lowest score first), derived from each golfer's position since the
+// feed itself isn't sorted. Each column has a natural first direction; clicking
+// the active column again toggles it.
 let statsSort = { key: 'pos', dir: 'asc' };
 const STATS_NATURAL_DIR = { pos: 'asc', name: 'asc', picks: 'desc', total: 'asc', thru: 'desc' };
 
@@ -310,8 +311,8 @@ async function loadStats() {
     const res = await fetch('/api/stats');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     statsData = await res.json();
-    // Stamp each golfer with its leaderboard index so 'pos' sort and the
-    // scorecard modal keep working after we re-sort a copy of the list.
+    // Stamp each golfer with its feed index so the scorecard modal can map back
+    // into statsData.golfers after we re-sort a copy of the list.
     (statsData.golfers || []).forEach((g, i) => { g._idx = i; });
     renderStats(statsData);
   } catch (e) {
@@ -321,7 +322,9 @@ async function loadStats() {
   }
 }
 
-// Value a golfer sorts by for a given column.
+// Value a golfer sorts by for a given column. Returns null for "no value"
+// (e.g. a missed-cut golfer has no finishing position); nulls always sink to
+// the bottom regardless of direction.
 function statsSortValue(g, key) {
   switch (key) {
     case 'name':  return (g.name || '').toLowerCase();
@@ -334,22 +337,33 @@ function statsSortValue(g, key) {
       return isNaN(n) ? 0 : n;
     }
     case 'pos':
-    default:      return g._idx;
+    default: {
+      // Actual finishing position: "T14" -> 14, "5" -> 5. Missed cut / no
+      // position has no rank and sinks to the bottom. The ESPN feed is NOT in
+      // leaderboard order, so we must derive rank from position, not _idx.
+      if (g.missed_cut) return null;
+      const m = /\d+/.exec(g.position || '');
+      return m ? +m[0] : null;
+    }
   }
 }
 
 function sortGolfers(golfers, key, dir) {
   const mult = dir === 'asc' ? 1 : -1;
+  const total = g => (g.total === null || g.total === undefined) ? Infinity : g.total;
+  // Tiebreak: better score first, then stable by original feed order.
+  const tiebreak = (a, b) => (total(a) - total(b)) || (a._idx - b._idx);
   return [...golfers].sort((a, b) => {
-    let av = statsSortValue(a, key);
-    let bv = statsSortValue(b, key);
-    // Golfers with no score always sink to the bottom, regardless of direction.
-    if (av === null && bv === null) return a._idx - b._idx;
-    if (av === null) return 1;
-    if (bv === null) return -1;
+    const av = statsSortValue(a, key);
+    const bv = statsSortValue(b, key);
+    const an = av === null || av === undefined;
+    const bn = bv === null || bv === undefined;
+    if (an && bn) return tiebreak(a, b);
+    if (an) return 1;   // no-value rows always last
+    if (bn) return -1;
     if (av < bv) return -1 * mult;
     if (av > bv) return  1 * mult;
-    return a._idx - b._idx; // stable tiebreak: keep leaderboard order
+    return tiebreak(a, b);
   });
 }
 
