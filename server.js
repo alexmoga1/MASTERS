@@ -58,11 +58,20 @@ function saveData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
+// Standalone letters that DON'T decompose under NFD (they're distinct letters,
+// not accented bases), so they'd otherwise be stripped. Map them to a Latin
+// equivalent \u2014 e.g. ESPN's "H\u00f8jgaard" must match our "Hojgaard".
+const LETTER_MAP = {
+  '\u00f8': 'o', '\u00e6': 'ae', '\u0153': 'oe', '\u00df': 'ss',
+  '\u0142': 'l', '\u0111': 'd', '\u00f0': 'd', '\u00fe': 'th', '\u0127': 'h', '\u0131': 'i'
+};
+
 function normalizeName(name) {
   return name
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u00f8\u00e6\u0153\u00df\u0142\u0111\u00f0\u00fe\u0127\u0131]/g, c => LETTER_MAP[c] || c)
     .replace(/[^a-z\s]/g, '')
     .trim();
 }

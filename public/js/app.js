@@ -61,6 +61,22 @@ function posClass(pos) {
   return 'pos-other';
 }
 
+// A row of dots — one per pick — showing who's still in (green) vs. cut (red),
+// so contention is readable at a glance without expanding the row.
+function renderPickDots(participant) {
+  const golfers = participant.golfers || [];
+  if (!golfers.length) return '';
+  let alive = 0;
+  const dots = golfers.map(g => {
+    let cls = 'pick-dot', title;
+    if (g.missed_cut) { cls += ' out'; title = `${g.name} — missed cut`; }
+    else if (g.live)  { cls += ' alive'; alive++; title = `${g.name} — still in`; }
+    else              { cls += ' unknown'; title = `${g.name} — no data`; }
+    return `<span class="${cls}" title="${escapeHtml(title)}"></span>`;
+  }).join('');
+  return `<span class="pick-dots" aria-label="${alive} of ${golfers.length} golfers still in contention">${dots}</span>`;
+}
+
 function renderLeaderboard(data) {
   const tbody = document.getElementById('lbBody');
   const { leaderboard } = data;
@@ -88,7 +104,7 @@ function renderLeaderboard(data) {
       <td class="col-pos">
         <span class="pos-badge ${posClass(p.position)}">${posDisplay}</span>
       </td>
-      <td class="col-name">${p.name}</td>
+      <td class="col-name"><span class="p-name">${p.name}</span>${renderPickDots(p)}</td>
       <td class="col-round ${scoreClass(p.roundScores[0])}">${fmt(p.roundScores[0])}</td>
       <td class="col-round ${scoreClass(p.roundScores[1])}">${fmt(p.roundScores[1])}</td>
       <td class="col-round ${scoreClass(p.roundScores[2])}">${fmt(p.roundScores[2])}</td>
@@ -263,6 +279,12 @@ function refreshNow() {
 let activeTab = 'leaderboard';
 let statsData = null;
 
+// Stats sort state. Default 'pos' = the leaderboard order the API returns
+// (official standings, lowest score first). Each column has a natural first
+// direction; clicking the active column again toggles it.
+let statsSort = { key: 'pos', dir: 'asc' };
+const STATS_NATURAL_DIR = { pos: 'asc', name: 'asc', picks: 'desc', total: 'asc', thru: 'desc' };
+
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => {
@@ -288,12 +310,79 @@ async function loadStats() {
     const res = await fetch('/api/stats');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     statsData = await res.json();
+    // Stamp each golfer with its leaderboard index so 'pos' sort and the
+    // scorecard modal keep working after we re-sort a copy of the list.
+    (statsData.golfers || []).forEach((g, i) => { g._idx = i; });
     renderStats(statsData);
   } catch (e) {
     console.error('Stats load failed:', e);
     const body = document.getElementById('statsBody');
     if (body) body.innerHTML = '<tr><td colspan="5" class="loading-cell">Failed to load stats. Retrying…</td></tr>';
   }
+}
+
+// Value a golfer sorts by for a given column.
+function statsSortValue(g, key) {
+  switch (key) {
+    case 'name':  return (g.name || '').toLowerCase();
+    case 'picks': return g.pickCount || 0;
+    case 'total': return (g.total === null || g.total === undefined) ? null : g.total;
+    case 'thru': {
+      if (g.missed_cut) return -1;
+      if (g.thru === 'F' || g.thru === 'Final') return 18;
+      const n = parseInt(g.thru, 10);
+      return isNaN(n) ? 0 : n;
+    }
+    case 'pos':
+    default:      return g._idx;
+  }
+}
+
+function sortGolfers(golfers, key, dir) {
+  const mult = dir === 'asc' ? 1 : -1;
+  return [...golfers].sort((a, b) => {
+    let av = statsSortValue(a, key);
+    let bv = statsSortValue(b, key);
+    // Golfers with no score always sink to the bottom, regardless of direction.
+    if (av === null && bv === null) return a._idx - b._idx;
+    if (av === null) return 1;
+    if (bv === null) return -1;
+    if (av < bv) return -1 * mult;
+    if (av > bv) return  1 * mult;
+    return a._idx - b._idx; // stable tiebreak: keep leaderboard order
+  });
+}
+
+function updateStatsSortIndicators() {
+  document.querySelectorAll('#statsTable th[data-sort]').forEach(th => {
+    const active = th.dataset.sort === statsSort.key;
+    th.classList.toggle('sort-active', active);
+    th.setAttribute('aria-sort', active ? (statsSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
+    let ind = th.querySelector('.sort-ind');
+    if (!ind) { ind = document.createElement('span'); ind.className = 'sort-ind'; th.appendChild(ind); }
+    ind.textContent = active ? (statsSort.dir === 'asc' ? '▲' : '▼') : '';
+  });
+}
+
+function setupStatsSorting() {
+  document.querySelectorAll('#statsTable th[data-sort]').forEach(th => {
+    th.setAttribute('role', 'button');
+    th.setAttribute('tabindex', '0');
+    const activate = () => {
+      const key = th.dataset.sort;
+      if (statsSort.key === key) {
+        statsSort.dir = statsSort.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        statsSort.key = key;
+        statsSort.dir = STATS_NATURAL_DIR[key] || 'asc';
+      }
+      if (statsData) renderStats(statsData);
+    };
+    th.addEventListener('click', activate);
+    th.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+    });
+  });
 }
 
 function renderStats(data) {
@@ -304,7 +393,10 @@ function renderStats(data) {
     return;
   }
 
-  tbody.innerHTML = golfers.map((g, idx) => {
+  updateStatsSortIndicators();
+
+  tbody.innerHTML = sortGolfers(golfers, statsSort.key, statsSort.dir).map(g => {
+    const idx = g._idx;
     const pos = g.missed_cut ? 'CUT' : (g.position && g.position !== '-' ? g.position : '–');
     const posCls = g.missed_cut ? 'pos-cut' : posClass(typeof g.position === 'string' && /^\d+$/.test(g.position) ? +g.position : 0);
     const chips = g.pickCount
@@ -409,5 +501,6 @@ if (Date.now() >= SUBMISSION_DEADLINE) {
   if (cta) cta.style.display = 'none';
 }
 
+setupStatsSorting();
 load();
 startCountdown();

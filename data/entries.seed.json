@@ -1,5 +1,306 @@
 {
-  "participants": [],
+  "participants": [
+    {
+      "id": "miles-e",
+      "name": "Miles E",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Jon Rahm",
+        "Collin Morikawa",
+        "Russell Henley",
+        "Patrick Reed"
+      ]
+    },
+    {
+      "id": "abe-eagle",
+      "name": "Abe Eagle",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Robert MacIntyre",
+        "Justin Rose",
+        "Sam Burns",
+        "Bryson DeChambeau"
+      ]
+    },
+    {
+      "id": "alpha-j",
+      "name": "Alpha J",
+      "paid": true,
+      "picks": [
+        "Tommy Fleetwood",
+        "Jon Rahm",
+        "Cameron Young",
+        "Joaquin Niemann",
+        "Ryo Hisatsune"
+      ]
+    },
+    {
+      "id": "jcorbs",
+      "name": "JCorbs",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Robert MacIntyre",
+        "Chris Gotterup",
+        "Shane Lowry",
+        "Sahith Theegala"
+      ]
+    },
+    {
+      "id": "moogggaaaa",
+      "name": "MOOGGGAAAA!!!",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Xander Schauffele",
+        "Wyndham Clark",
+        "Sam Burns",
+        "Patrick Reed"
+      ]
+    },
+    {
+      "id": "henry-c",
+      "name": "Henry C",
+      "paid": true,
+      "picks": [
+        "Tommy Fleetwood",
+        "Jon Rahm",
+        "Collin Morikawa",
+        "Russell Henley",
+        "Akshay Bhatia"
+      ]
+    },
+    {
+      "id": "rooster",
+      "name": "Rooster",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Robert MacIntyre",
+        "Cameron Young",
+        "Shane Lowry",
+        "Jordan Spieth"
+      ]
+    },
+    {
+      "id": "barry-r",
+      "name": "Barry r",
+      "paid": true,
+      "picks": [
+        "Tommy Fleetwood",
+        "Ludvig Aberg",
+        "Justin Rose",
+        "Shane Lowry",
+        "Patrick Reed"
+      ]
+    },
+    {
+      "id": "jack-r",
+      "name": "Jack R",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Robert MacIntyre",
+        "Tyrrell Hatton",
+        "Sam Burns",
+        "Haotong Li"
+      ]
+    },
+    {
+      "id": "asher-w",
+      "name": "Asher W",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Ludvig Aberg",
+        "Cameron Young",
+        "Tom Kim",
+        "Nicolai Hojgaard"
+      ]
+    },
+    {
+      "id": "c-smitty",
+      "name": "C Smitty",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Ludvig Aberg",
+        "Chris Gotterup",
+        "Tom Kim",
+        "Kurt Kitayama"
+      ]
+    },
+    {
+      "id": "john-caywood",
+      "name": "john caywood",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Ludvig Aberg",
+        "Chris Gotterup",
+        "Patrick Cantlay",
+        "Akshay Bhatia"
+      ]
+    },
+    {
+      "id": "taylor-m",
+      "name": "Taylor M",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Robert MacIntyre",
+        "Chris Gotterup",
+        "Joaquin Niemann",
+        "Alex Noren"
+      ]
+    },
+    {
+      "id": "caden-jackson",
+      "name": "Caden Jackson",
+      "paid": true,
+      "picks": [
+        "Tommy Fleetwood",
+        "Ludvig Aberg",
+        "Tyrrell Hatton",
+        "Tom Kim",
+        "Brooks Koepka"
+      ]
+    },
+    {
+      "id": "noah-l",
+      "name": "Noah L",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Xander Schauffele",
+        "Justin Rose",
+        "Sam Burns",
+        "Jordan Spieth"
+      ]
+    },
+    {
+      "id": "mr-e",
+      "name": "Mr. E",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Xander Schauffele",
+        "Justin Rose",
+        "Justin Thomas",
+        "Bryson DeChambeau"
+      ]
+    },
+    {
+      "id": "mrs-manna",
+      "name": "Mrs Manna",
+      "paid": true,
+      "picks": [
+        "Tommy Fleetwood",
+        "Ludvig Aberg",
+        "Justin Rose",
+        "Sam Burns",
+        "Gary Woodland"
+      ]
+    },
+    {
+      "id": "alex-lowery",
+      "name": "Alex lowery",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Jon Rahm",
+        "Tyrrell Hatton",
+        "Sam Burns",
+        "Akshay Bhatia"
+      ]
+    },
+    {
+      "id": "naoki",
+      "name": "Naoki",
+      "paid": true,
+      "picks": [
+        "Scottie Scheffler",
+        "Xander Schauffele",
+        "Chris Gotterup",
+        "Tom Kim",
+        "Nicolai Hojgaard"
+      ]
+    },
+    {
+      "id": "ward",
+      "name": "Ward",
+      "paid": true,
+      "picks": [
+        "Matt Fitzpatrick",
+        "Xander Schauffele",
+        "Wyndham Clark",
+        "Sam Burns",
+        "Patrick Reed"
+      ]
+    },
+    {
+      "id": "jacob-e",
+      "name": "Jacob E",
+      "paid": true,
+      "picks": [
+        "Matt Fitzpatrick",
+        "Ludvig Aberg",
+        "Chris Gotterup",
+        "J.J. Spaun",
+        "Jiho Yang"
+      ]
+    },
+    {
+      "id": "evan-i",
+      "name": "Evan I",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Jon Rahm",
+        "Collin Morikawa",
+        "Joaquin Niemann",
+        "Nicolai Hojgaard"
+      ]
+    },
+    {
+      "id": "adam-lindstrom",
+      "name": "Adam Lindstrom",
+      "paid": true,
+      "picks": [
+        "Matt Fitzpatrick",
+        "Xander Schauffele",
+        "Chris Gotterup",
+        "Justin Thomas",
+        "Maverick McNealy"
+      ]
+    },
+    {
+      "id": "davis-hianik",
+      "name": "Davis Hianik",
+      "paid": true,
+      "picks": [
+        "Rory McIlroy",
+        "Viktor Hovland",
+        "Wyndham Clark",
+        "Tom Kim",
+        "Corey Conners"
+      ]
+    },
+    {
+      "id": "jgr",
+      "name": "JGR",
+      "paid": true,
+      "picks": [
+        "Matt Fitzpatrick",
+        "Viktor Hovland",
+        "Wyndham Clark",
+        "Russell Henley",
+        "Maverick McNealy"
+      ]
+    }
+  ],
   "tiers": {
     "tier1": [
       {

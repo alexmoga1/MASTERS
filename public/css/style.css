@@ -354,6 +354,37 @@ main {
 
 .col-pos { text-align: center; width: 56px; }
 .col-name { font-weight: 600; }
+
+/* Pick-status dots on the main leaderboard row: green = still in, red = cut */
+.pick-dots {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.pick-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+.pick-dot.alive   { background: #2fa84f; }
+.pick-dot.out     { background: #d64545; }
+.pick-dot.unknown { background: #c7c7bd; }
+
+/* Dots legend — the touch-friendly replacement for hover tooltips */
+.dots-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin: 4px 2px 10px;
+  font-size: 0.74rem;
+  color: var(--gray-600);
+}
+.dots-legend .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.dots-legend .legend-note { margin-left: auto; font-style: italic; opacity: 0.85; }
 .col-round { text-align: center; width: 52px; }
 .col-total { text-align: center; width: 72px; font-weight: 700; font-size: 1rem; }
 .col-expand { text-align: center; width: 36px; color: var(--gray-400); }
@@ -943,6 +974,13 @@ header { border-bottom: 4px solid var(--gold); }
 .lb-subtle { font-size: 0.75rem; color: var(--gray-400); font-style: italic; }
 
 /* ── Stats board ─────────────────────────────────────────────────────────────── */
+/* Sortable stats headers */
+.stats-table thead th.sortable { cursor: pointer; user-select: none; position: relative; }
+.stats-table thead th.sortable:hover { background: var(--green); }
+.stats-table thead th.sortable:focus-visible { outline: 2px solid var(--gold-light); outline-offset: -2px; }
+.stats-table thead th.sort-active { color: #fff; }
+.stats-table thead th .sort-ind { font-size: 0.62rem; margin-left: 4px; vertical-align: middle; }
+
 .stats-table .col-picks { text-align: center; width: 64px; white-space: nowrap; }
 .stats-table .col-thru  { text-align: center; width: 56px; color: var(--gray-600); font-size: 0.82rem; }
 
@@ -1108,6 +1146,14 @@ header { border-bottom: 4px solid var(--gold); }
   .stats-table .col-thru { display: none; }
   .picker-chip { max-width: 96px; font-size: 0.66rem; }
   .pick-count { font-size: 0.68rem; padding: 2px 7px; }
+
+  /* Pick dots: drop onto their own line under the name so nothing crowds,
+     and size up slightly for touch-screen legibility */
+  .col-name .p-name { display: block; }
+  .pick-dots { margin-left: 0; margin-top: 6px; gap: 6px; }
+  .pick-dot { width: 11px; height: 11px; }
+  .dots-legend { font-size: 0.72rem; }
+  .dots-legend .legend-note { margin-left: 0; width: 100%; }
 
   .modal-card { max-width: 100%; max-height: 90vh; border-radius: 14px 14px 0 0; }
   .sc-name { font-size: 1.2rem; }

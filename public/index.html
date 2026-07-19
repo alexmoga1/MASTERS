@@ -59,6 +59,12 @@
           <button class="refresh-btn" id="refreshBtn" onclick="refreshNow()">↻ Refresh</button>
         </div>
 
+        <div class="dots-legend" aria-hidden="true">
+          <span class="legend-item"><span class="pick-dot alive"></span>Still in</span>
+          <span class="legend-item"><span class="pick-dot out"></span>Missed cut</span>
+          <span class="legend-note">Tap a row for details</span>
+        </div>
+
         <div class="table-wrap">
           <table class="lb-table" id="lbTable">
             <thead>
@@ -101,11 +107,11 @@
           <table class="lb-table stats-table" id="statsTable">
             <thead>
               <tr>
-                <th class="col-pos">POS</th>
-                <th class="col-name">GOLFER</th>
-                <th class="col-picks">PICKS</th>
-                <th class="col-total">SCORE</th>
-                <th class="col-thru">THRU</th>
+                <th class="col-pos sortable" data-sort="pos">POS</th>
+                <th class="col-name sortable" data-sort="name">GOLFER</th>
+                <th class="col-picks sortable" data-sort="picks">PICKS</th>
+                <th class="col-total sortable" data-sort="total">SCORE</th>
+                <th class="col-thru sortable" data-sort="thru">THRU</th>
               </tr>
             </thead>
             <tbody id="statsBody">
